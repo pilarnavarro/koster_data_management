@@ -266,7 +266,7 @@ def process_clips_koster(annotations, row_class_id, rows_list):
     return rows_list
 
 
-def process_movies_csv(movies_df):
+def process_koster_movies_csv(movies_df):
     # Standarise the filename
     movies_df["filename"] = movies_df["filename"].str.normalize("NFD")
 
