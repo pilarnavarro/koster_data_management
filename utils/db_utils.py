@@ -101,7 +101,7 @@ def test_table(df, table_name, keys=["id"]):
             f"The table {table_name} has invalid entries, please ensure that all columns are non-zero"
         )
         print(
-            f"The invalid entries are {df[df[keys].isnull()]}"
+            f"The invalid entries are {df[df[keys].isnull().any(axis=1)]}"
         )
 
 

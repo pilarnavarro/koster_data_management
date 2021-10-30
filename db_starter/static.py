@@ -39,16 +39,19 @@ def add_movies(movies_csv, movies_path, project_name, db_path):
     
     # Check if the project is the Spyfish Aotearoa
     if project_name == "Spyfish_Aotearoa":
-        movies_df = spyfish_utils.process_spyfish_movies_csv(movies_df)
+        # Specify the key (path in S3 of the object)
+        movies_df["Fpath"] = movies_df["prefix"] + "/" + movies_df["filename"]
+        
+        # Remove extension from the filename
+        movies_df["filename"] = movies_df["filename"].str.split('.',1).str[0]
             
     # Check if the project is the KSO
     if project_name == "Koster_Seafloor_Obs":
-        movies_df = koster_utils.process_koster_movies_csv(movies_df)
-    
+        movies_df = koster_utils.process_koster_movies_csv(movies_df, movies_path)
+       
     # Ensure all videos have fps, duration, starting and ending time of the survey
     movies_df = movie_utils.get_movie_parameters(movies_df, movies_csv, project_name)
     
-    print("Movie parameters checked")
     # Ensure date is ISO 8601:2004(E) compatible with Darwin Data standards
     #try:
     #    date.fromisoformat(movies_df['eventDate'])
@@ -62,18 +65,16 @@ def add_movies(movies_csv, movies_path, project_name, db_path):
     sites_df = pd.read_sql_query("SELECT id, siteName FROM sites", conn)
     sites_df = sites_df.rename(columns={"id": "Site_id"})
 
-
-    
+    # Merge movies and sites dfs
     movies_df = pd.merge(
         movies_df, sites_df, how="left", on="siteName"
     )
     
-
     # Select only those fields of interest
     movies_db = movies_df[
         ["movie_id", "filename", "created_on", "fps", "duration", "survey_start", "survey_end", "Author", "Site_id", "Fpath"]
     ]
-    
+
     # Roadblock to prevent empty information
     db_utils.test_table(
         movies_db, "movies", movies_db.columns

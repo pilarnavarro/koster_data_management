@@ -38,6 +38,15 @@ def get_movie_parameters(df, movies_csv, project_name):
             
             if parameter in ["fps","duration"]:
                 
+                # Add info about accessing the Spyfish movies from AWS
+                if project_name == "Spyfish_Aotearoa":
+                    # Start AWS session
+                    aws_access_key_id, aws_secret_access_key = server_utils.aws_credentials()
+                    client = server_utils.connect_s3(aws_access_key_id, aws_secret_access_key)
+
+                    # Check the movies are accessible
+                    miss_par_df = spyfish_utils.check_spyfish_movies(miss_par_df, client)
+                        
                 # Prevent missing parameters from movies that don't exists
                 if len(miss_par_df[~miss_par_df.exists]) > 0:
                     print(
@@ -50,7 +59,7 @@ def get_movie_parameters(df, movies_csv, project_name):
                     # Check if the project is the Spyfish Aotearoa
                     if project_name == "Spyfish_Aotearoa":
                         # Download from s3, calculate and add fps/length info
-                        df = spyfish_utils.add_fps_length_spyfish(df)
+                        df = spyfish_utils.add_fps_length_spyfish(df, miss_par_df, client)
                         
                     else:    
                         # Set the fps and duration of each movie

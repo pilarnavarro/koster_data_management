@@ -103,12 +103,7 @@ def retrieve_s3_buckets_info(client, bucket_i):
     
     return contents_s3_pd
 
-def get_movies_from_aws(bucket_i, aws_folder):
-    # Connect to the AWS
-    aws_access_key_id, aws_secret_access_key = aws_credentials()
-    
-    # Get the AWS client
-    client = connect_s3(aws_access_key_id, aws_secret_access_key)
+def get_movies_from_aws(client, bucket_i, aws_folder):
         
     # Retrieve info from the bucket
     contents_s3_pd = retrieve_s3_buckets_info(client, bucket_i)

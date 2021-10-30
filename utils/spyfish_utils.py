@@ -10,15 +10,13 @@ import utils.movie_utils as movie_utils
 from tqdm import tqdm
 import subprocess
 
-def process_spyfish_movies_csv(movies_df):
-    # Get dataframe of movies from AWS
-    zoo_contents_s3_pd_movies = server_utils.get_movies_from_aws("marine-buv", "buv-zooniverse-uploads")
+def check_spyfish_movies(movies_df, client):
     
-    # Select only those deployments that are valid
-    movies_df = movies_df[~movies_df["IsBadDeployment"]].reset_index(drop=True)  
-
+    # Get dataframe of movies from AWS
+    zoo_contents_s3_pd_movies = server_utils.get_movies_from_aws(client, "marine-buv", "buv-zooniverse-uploads")
+    
     # Specify the key (path in S3 of the object)
-    movies_df["Key"] = movies_df["prefix"] + "/" + movies_df["filename"]
+    movies_df["Key"] = movies_df["Fpath"]
 
     # Missing info for files in the "buv-zooniverse-uploads"
     movies_df = movies_df.merge(zoo_contents_s3_pd_movies["Key"], 
@@ -28,20 +26,34 @@ def process_spyfish_movies_csv(movies_df):
 
     # Check that movies can be mapped
     movies_df['exists'] = np.where(movies_df["_merge"]=="left_only", False, True)
-
-    # Report on unmapped movies
-    unmapped_movies_df = movies_df[~movies_df["exists"]].reset_index(drop=True)
-    if not unmapped_movies_df.empty:
-        print("The following", len(unmapped_movies_df.index), "movies are missing from the S3 and are not bad deployments")
-        print(*unmapped_movies_df.filename.unique(), sep = "\n")
         
-    # Create Fpath and drop _merge columns to match sql squema
-    movies_df["Fpath"] = movies_df["Key"]
+    # Drop _merge columns to match sql squema
     movies_df = movies_df.drop("_merge", axis=1)
         
     return movies_df
                        
-            
+def add_fps_length_spyfish(df, miss_par_df, client):
+    
+    # Loop through each movie missing fps and duration
+    for index, row in tqdm(miss_par_df.iterrows(), total=miss_par_df.shape[0]):
+        if not os.path.exists(row['filename']):
+            # Download the movie locally
+            server_utils.download_object_from_s3(
+                client,
+                bucket='marine-buv',
+                key=row['Key'],
+                filename=row['filename'],
+            )
+
+        # Set the fps and duration of the movie
+        df.at[index,"fps"], df.at[index, "duration"] = movie_utils.get_length(row['filename'])
+        
+        # Delete the downloaded movie
+        os.remove(row['filename'])
+                    
+                    
+    return df
+    
 def add_movie_filenames(movies_df):
 
     #####Get info from bucket#####
@@ -274,30 +286,4 @@ def process_clips_spyfish(annotations, row_class_id, rows_list):
             
     return rows_list
 
-def add_fps_length_spyfish(df):
-    # Select movies with missing fps and duration
-    df_missing = df[(df["fps"].isna())|(df["duration"].isna())]
 
-    # Start AWS session
-    aws_access_key_id, aws_secret_access_key = server_utils.aws_credentials()
-    session = server_utils.connect_s3(aws_access_key_id, aws_secret_access_key)
-
-    # Loop through each movie missing fps and duration
-    for index, row in tqdm(df_missing.iterrows(), total=df_missing.shape[0]):
-        if not os.path.exists(row['filename']):
-            # Download the movie locally
-            server_utils.download_object_from_s3(
-                session,
-                bucket='marine-buv',
-                key=row['Key'],
-                filename=row['filename'],
-            )
-
-        # Set the fps and duration of the movie
-        df.at[index,"fps"], df.at[index, "duration"] = movie_utils.get_length(row['filename'])
-        
-        # Delete the downloaded movie
-        os.remove(row['filename'])
-                    
-                    
-    return df
