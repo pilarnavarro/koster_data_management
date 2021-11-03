@@ -53,7 +53,7 @@ def get_sites_movies_species():
     db_csv_info = "../db_starter/db_csv_info/" 
     
     # Check if the directory db_csv_info exists
-    if not os.path.exists(db_csv_info):
+    if not os.path.exists(db_csv_info) or len(os.listdir(db_csv_info)) == 0:
         
         print("There is no folder with initial information about the sites, movies and species.\n Please enter the ID of a Google Drive zipped folder with the inital database information. \n For example, the ID of the template information is: 1PZGRoSY_UpyLfMhRphMUMwDXw4yx1_Fn")
         
