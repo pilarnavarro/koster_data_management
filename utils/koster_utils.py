@@ -265,6 +265,22 @@ def process_clips_koster(annotations, row_class_id, rows_list):
             
     return rows_list
 
+
+def process_koster_movies_csv(movies_df, movies_path):
+    # Standarise the filename
+    movies_df["filename"] = movies_df["filename"].str.normalize("NFD")
+
+    # Unswedify the filename
+    movies_df["filename"] = movies_df["filename"].apply(lambda x: unswedify(x))
+
+    # Include server's path to the movie files
+    movies_df["Fpath"] = movies_path + "/" + movies_df["filename"]
+
+    # Check that videos can be mapped
+    movies_df['exists'] = movies_df['Fpath'].map(os.path.isfile)
+    
+    return movies_df
+
 def bb_iou(boxA, boxB):
 
     # Compute edges

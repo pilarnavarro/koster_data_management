@@ -53,7 +53,7 @@ def get_sites_movies_species():
     db_csv_info = "../db_starter/db_csv_info/" 
     
     # Check if the directory db_csv_info exists
-    if not os.path.exists(db_csv_info):
+    if not os.path.exists(db_csv_info) or len(os.listdir(db_csv_info)) == 0:
         
         print("There is no folder with initial information about the sites, movies and species.\n Please enter the ID of a Google Drive zipped folder with the inital database information. \n For example, the ID of the template information is: 1PZGRoSY_UpyLfMhRphMUMwDXw4yx1_Fn")
         
@@ -103,6 +103,27 @@ def retrieve_s3_buckets_info(client, bucket_i):
     
     return contents_s3_pd
 
+def get_movies_from_aws(client, bucket_i, aws_folder):
+        
+    # Retrieve info from the bucket
+    contents_s3_pd = retrieve_s3_buckets_info(client, bucket_i)
+
+    # Specify the filename of the objects (videos)        
+    contents_s3_pd['raw_filename'] = contents_s3_pd['Key'].str.split('/').str[-1]
+
+    # Specify the prefix (directory) of the objects        
+    contents_s3_pd['prefix'] = contents_s3_pd['Key'].str.rsplit('/',1).str[0]
+    
+    # Select only files within the buv-zooniverse-uploads bucket
+    zoo_contents_s3_pd = contents_s3_pd[contents_s3_pd['prefix'].str.contains(aws_folder)].reset_index(drop = True)
+
+    # Specify the formats of the movies to select
+    movie_formats = tuple(['wmv', 'mpg', 'mov', 'avi', 'mp4', 'MOV', 'MP4'])
+
+    # Select only files of interest (movies)
+    zoo_contents_s3_pd_movies = zoo_contents_s3_pd[zoo_contents_s3_pd['raw_filename'].str.endswith(movie_formats)]
+    
+    return zoo_contents_s3_pd_movies
 
 def download_object_from_s3(client, *, bucket, key, version_id=None, filename):
     """

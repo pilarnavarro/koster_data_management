@@ -1,10 +1,59 @@
 #spyfish utils
+import os
 import sqlite3
 import pandas as pd
+import numpy as np
 
 import utils.db_utils as db_utils
 import utils.server_utils as server_utils
+import utils.movie_utils as movie_utils
+from tqdm import tqdm
+import subprocess
 
+def check_spyfish_movies(movies_df, client):
+    
+    # Get dataframe of movies from AWS
+    zoo_contents_s3_pd_movies = server_utils.get_movies_from_aws(client, "marine-buv", "buv-zooniverse-uploads")
+    
+    # Specify the key (path in S3 of the object)
+    movies_df["Key"] = movies_df["Fpath"]
+
+    # Missing info for files in the "buv-zooniverse-uploads"
+    movies_df = movies_df.merge(zoo_contents_s3_pd_movies["Key"], 
+                                                   on=['Key'], 
+                                                   how='left', 
+                                                   indicator=True)
+
+    # Check that movies can be mapped
+    movies_df['exists'] = np.where(movies_df["_merge"]=="left_only", False, True)
+        
+    # Drop _merge columns to match sql squema
+    movies_df = movies_df.drop("_merge", axis=1)
+        
+    return movies_df
+                       
+def add_fps_length_spyfish(df, miss_par_df, client):
+    
+    # Loop through each movie missing fps and duration
+    for index, row in tqdm(miss_par_df.iterrows(), total=miss_par_df.shape[0]):
+        if not os.path.exists(row['filename']):
+            # Download the movie locally
+            server_utils.download_object_from_s3(
+                client,
+                bucket='marine-buv',
+                key=row['Key'],
+                filename=row['filename'],
+            )
+
+        # Set the fps and duration of the movie
+        df.at[index,"fps"], df.at[index, "duration"] = movie_utils.get_length(row['filename'])
+        
+        # Delete the downloaded movie
+        os.remove(row['filename'])
+                    
+                    
+    return df
+    
 def add_movie_filenames(movies_df):
 
     #####Get info from bucket#####
@@ -32,8 +81,24 @@ def add_movie_filenames(movies_df):
 
     # Set the contents as pandas dataframe
     filenames_s3_buv_pd = pd.DataFrame(objs['Contents'])
+    
+    # Select only surveys that are missing filenames
+    unprocessed_movies_df = movies_df[movies_df["filename"].isna()].reset_index(drop=True)
+    
+    # Write the filename of the concatenated movie
+    unprocessed_movies_df["filename"] = unprocessed_movies_df["siteName"] + "_" + unprocessed_movies_df["created_on"].str.replace('/','_')+ ".MP4"
+    
+    # Download go pro videos, concatenate them and upload the concatenated videos to aws
+    concatenate_videos(unprocessed_movies_df)
 
     
+    # Add the updated movie info 
+    movies_df = movies_df[~movies_df["filename"].isna()].reset_index(drop=True).append(unprocessed_movies_df)
+    
+    
+    # Update the local movies.csv file with the new fps and duration information
+    df.drop(["Fpath","exists"], axis=1).to_csv(movies_csv,index=False)
+        
     ######Merge csv and bucket information
     # Check that videos can be mapped
     movies_df['exists'] = movies_df['Fpath'].map(os.path.isfile)
@@ -47,75 +112,89 @@ def add_movie_filenames(movies_df):
     
     #movies_to_upload = apply(concatenate_go_pro x["VideoFilename","go_pro_files"])
 
-def concatenate_go_pro(list_go_pro):
-    
-    if not list_go_pro:
-        #retreive the list of go pro files to concatenate
-        list_go_pro
-        
-    # Specify the path for the concatenated videos
-    movies_to_upload["concat_video"] = concat_folder + "/" + movies_to_upload['VideoFilename'] + ".MP4"
-
-    # Select only videos from the S3 bucket 
-    videos_s3 = filenames_s3_buv_pd[filenames_s3_buv_pd.Key.str.endswith(".MP4")].reset_index(drop=True)
-
-    # Specify the filename of the raw videos        
-    videos_s3['raw_filename'] = videos_s3['Key'].str.split('/').str[-1]
+# Function to download go pro videos, concatenate them and upload the concatenated videos to aws 
+def concatenate_videos(df, session):
 
     # Loop through each survey to find out the raw videos recorded with the GoPros
-    for index, row in tqdm(movies_to_upload.iterrows(), total=movies_to_upload.shape[0]):
+    for index, row in tqdm(df.iterrows(), total=df.shape[0]):
+        
+        # Select the go pro videos from the "i" survey to concatenate
+        list1 = row['go_pro_files'].split(';')
+        list_go_pro = [row['prefix'] + "/" + s for s in list1]
 
-      # Select videos from the "i" survey to concatenate
-      videos_s3_i = videos_s3[videos_s3.Key.str.startswith(row['directory_prefix'])].sort_values(by=['Key']).reset_index(drop=True)
+        # Start text file and list to keep track of the videos to concatenate
+        textfile_name = "a_file.txt"
+        textfile = open(textfile_name, "w")
+        video_list = []
 
-      # Start text file and list to keep track of the videos to concatenate
-      textfile_name = "a_file.txt"
-      textfile = open(textfile_name, "w")
-      video_list = []
+        print("Downloading", len(list_go_pro), "videos")
 
-      print("Downloading ", videos_s3_i.shape[0], " videos")
+        # Download each go pro video from the S3 bucket
+        for go_pro_i in tqdm(list_go_pro, total=len(list_go_pro)):
+            
+            # Specify the temporary output of the go pro file
+            go_pro_output = go_pro_i.split("/")[-1]
 
-      # Download each row video from the S3 bucket
-      for index_i, row_i in tqdm(videos_s3_i.iterrows(), total=videos_s3_i.shape[0]):
+            # Download the files from the S3 bucket
+            if not os.path.exists(go_pro_output):
+                server_utils.download_object_from_s3(
+                    session,
+                    bucket=row['bucket'],
+                    key=go_pro_i,
+                    filename=go_pro_output,
+                )
+                
+                #client.download_file(bucket_i, go_pro_i, go_pro_output)
 
-        # Specify the go pro files input and output
-        go_pro_input = row_i['Key']
-        go_pro_output = row_i['raw_filename']
+            # Keep track of the videos to concatenate 
+            textfile.write("file '"+ go_pro_output + "'"+ "\n")
+            video_list.append(go_pro_output)
 
-        # Download the files from the S3 bucket
-        if not os.path.exists(go_pro_output):
-          client.download_file(bucket_i, go_pro_input, go_pro_output)
+        textfile.close()
 
-        # Keep track of the videos to concatenate 
-        textfile.write("file '"+ go_pro_output + "'"+ "\n")
-        video_list.append(go_pro_output)
+        concat_video = row['filename']
 
-      textfile.close()
+        if not os.path.exists(concat_video):
 
-      concat_video = str(row['concat_video'])
+            print("Concatenating ",concat_video)
 
-      if not os.path.exists(concat_video):
-
-        print("Concatenating ",concat_video)
-
-        # Concatenate the videos
-        subprocess.call(["ffmpeg", 
-                          "-f", "concat", 
-                          "-safe", "0",
-                          "-i", "a_file.txt", 
-                          "-c", "copy", 
-                          "-an",#removes the audio
-                          concat_video])
+            # Concatenate the videos
+            subprocess.call(["ffmpeg", 
+                             "-f", "concat", 
+                             "-safe", "0",
+                             "-i", "a_file.txt", 
+                             "-c", "copy", 
+                             #"-an",#removes the audio
+                             concat_video])
+            
         print(concat_video, "concatenated successfully")
 
-      # Delete the raw videos downloaded from the S3 bucket
-      for f in video_list:
+        # Upload the concatenated video to the S3
+        s3_destination = row['prefix'] + "/" + concat_video
+        server_utils.upload_file_to_s3(
+            session,
+            bucket=row['bucket'],
+            key=s3_destination,
+            filename=concat_video,
+        )
+                    
+        print(concat_video, "succesfully uploaded to", s3_destination)
+        
+        # Delete the raw videos downloaded from the S3 bucket
+        for f in video_list:
             os.remove(f)
 
-      # Delete the text file
-      os.remove(textfile_name)
+        # Delete the text file
+        os.remove(textfile_name)
+        
+        # Update the fps and length info
+        #movie_utils.get_length(concat_video)
+        
+        # Delete the concat video
+        os.remove(concat_video)
 
-      print("Temporary files and videos removed")
+        print("Temporary files and videos removed")
+       
     
 def process_spyfish_subjects(subjects, db_path):
     
@@ -206,3 +285,5 @@ def process_clips_spyfish(annotations, row_class_id, rows_list):
             
             
     return rows_list
+
+

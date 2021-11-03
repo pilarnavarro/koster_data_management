@@ -72,7 +72,7 @@ def retrieve_zoo_info(username: str, password: str, project_name: str, zoo_info:
             export_df = pd.read_csv(io.StringIO(export.content.decode("utf-8")))
             
             # If KSO deal with duplicated subjects
-            if project_name == "Koster Seafloor Obs":
+            if project_name == "Koster_Seafloor_Obs":
 
                 # Clear duplicated subjects
                 if info_n == "subjects":
@@ -120,7 +120,7 @@ def extract_metadata(subj_df):
 def populate_subjects(subjects, project_name, db_path):
 
     # Check if the Zooniverse project is the KSO
-    if project_name == "Koster Seafloor Obs":
+    if project_name == "Koster_Seafloor_Obs":
 
         subjects = process_koster_subjects(subjects, db_path)
 
@@ -133,7 +133,7 @@ def populate_subjects(subjects, project_name, db_path):
         subjects = pd.concat([subjects_df, subjects_meta], axis=1)
 
         # Check if the Zooniverse project is the Spyfish
-        if project_name == "Spyfish Aotearoa":
+        if project_name == "Spyfish_Aotearoa":
 
             subjects = process_spyfish_subjects(subjects, db_path)
 

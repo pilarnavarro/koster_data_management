@@ -8,6 +8,28 @@ from IPython.display import HTML, display, update_display, clear_output
 import ipywidgets as widgets
 from ipywidgets import interact
 from utils.zooniverse_utils import auth_session
+from utils.spyfish_utils import connect_spyfish_server
+
+def choose_cold_server():
+    
+    # Select cold server storage
+    cold_server = widgets.Dropdown(
+        options=["local","S3","Chalmers"],
+        description='Cold server:',
+        ensure_option=True,
+        disabled=False,
+    )
+    
+    display(cold_server)
+    
+    return cold_server
+
+
+def connect_hot_server(cold_server):
+    if cold_server == "S3":
+        connect_spyfish_server()
+        
+
 
 def choose_movies(db_path):
     

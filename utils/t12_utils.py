@@ -404,11 +404,11 @@ def process_clips(df: pd.DataFrame, project_name):
         annotations = json.loads(row["annotations"])
 
         # Select the information from the species identification task
-        if project_name == "Koster Seafloor Obs":
+        if project_name == "Koster_Seafloor_Obs":
             rows_list = process_clips_koster(annotations, row["classification_id"], rows_list)
             
         # Check if the Zooniverse project is the Spyfish
-        if project_name == "Spyfish Aotearoa":
+        if project_name == "Spyfish_Aotearoa":
             rows_list = process_clips_spyfish(annotations, row["classification_id"], rows_list)
 
     # Create a data frame with annotations as rows

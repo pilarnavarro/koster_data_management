@@ -100,6 +100,9 @@ def test_table(df, table_name, keys=["id"]):
         print(
             f"The table {table_name} has invalid entries, please ensure that all columns are non-zero"
         )
+        print(
+            f"The invalid entries are {df[df[keys].isnull().any(axis=1)]}"
+        )
 
 
 def get_id(row, field_name, table_name, conn, conditions={"a": "=b"}):
