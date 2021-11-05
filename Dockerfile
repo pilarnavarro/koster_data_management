@@ -3,10 +3,11 @@
 
 FROM python:3.8-slim
 
-RUN pip install --no-cache-dir notebook
+RUN pip install --upgrade pip --user
 
 RUN apt-get update && \
     apt-get upgrade -y && \
+    apt-get install -y make automake gcc g++ subversion && \
     apt-get install -y git && \
     apt-get install -y vim && \
     apt-get install -y libglib2.0-0 && \
