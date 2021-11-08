@@ -12,20 +12,6 @@ from pathlib import Path
 
 # Common utility functions to connect to external servers (AWS, GDrive,...)
 
-def choose_server():
-    
-    # Select server storage
-    server_i = widgets.Dropdown(
-        options=["local","S3","Chalmers"],
-        description='Cold server:',
-        ensure_option=True,
-        disabled=False,
-    )
-    
-    display(server_i)
-    
-    return server_i
-
 def download_csv_from_google_drive(file_url):
 
     # Download the csv files stored in Google Drive with initial information about

@@ -27,7 +27,8 @@ def upload_movies():
     upload_info_movies()
     print("uploaded")
     
-    
+# Check that videos can be mapped
+    movies_df['exists'] = movies_df['Fpath'].map(os.path.isfile)    
     
 def upload_info_movies():
 

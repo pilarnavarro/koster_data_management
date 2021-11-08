@@ -21,7 +21,19 @@ def choose_project():
     display(choose_project)
     return choose_project
 
+def choose_server():
     
+    # Select server storage
+    server_i = widgets.Dropdown(
+        options=["local","S3","Chalmers"],
+        description='Choose server:',
+        ensure_option=True,
+        disabled=False,
+    )
+    
+    display(server_i)
+    
+    return server_i    
     
 def choose_single_workflow(workflows_df):
 
