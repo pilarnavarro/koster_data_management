@@ -8,7 +8,6 @@ from IPython.display import HTML, display, update_display, clear_output
 import ipywidgets as widgets
 from ipywidgets import interact
 from utils.zooniverse_utils import auth_session
-from utils.spyfish_utils import connect_spyfish_server
 
 def choose_cold_server():
     
