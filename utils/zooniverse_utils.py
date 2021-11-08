@@ -51,6 +51,8 @@ def retrieve_zoo_info(username: str, password: str, project_name: str, zoo_info:
     # Read the latest list of projects
     projects_df = pd.read_csv(projects_csv)
     
+    # Get the number of the Zooniverse project
+    project_n = projects_df[projects_df["Project_name"]==project_name]["Zooniverse_number"].unique()[0]
     print("Connecting to the Zooniverse project")
 
     # Connect to the Zooniverse project
