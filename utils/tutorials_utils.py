@@ -22,3 +22,44 @@ def choose_project():
     return choose_project
 
     
+    
+def choose_single_workflow(workflows_df):
+
+    layout = widgets.Layout(width="auto", height="40px")  # set width and height
+
+    # Display the names of the workflows
+    workflow_name = widgets.Dropdown(
+        options=workflows_df.display_name.unique().tolist(),
+        value=workflows_df.display_name.unique().tolist()[0],
+        description="Workflow name:",
+        disabled=False,
+    )
+
+    # Display the type of subjects
+    subj_type = widgets.Dropdown(
+        options=["frame", "clip"],
+        value="clip",
+        description="Subject type:",
+        disabled=False,
+    )
+
+    display(workflow_name)
+    display(subj_type)
+
+    return workflow_name, subj_type
+
+def choose_clip_workflows(workflows_df):
+
+    layout = widgets.Layout(width="auto", height="40px")  # set width and height
+
+    # Display the names of the workflows
+    workflow_name = widgets.SelectMultiple(
+        options=workflows_df.display_name.unique().tolist(),
+        description="Workflow name:",
+        disabled=False,
+    )
+
+    
+    display(workflow_name)
+
+    return workflow_name

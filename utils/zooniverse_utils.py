@@ -51,8 +51,6 @@ def retrieve_zoo_info(username: str, password: str, project_name: str, zoo_info:
     # Read the latest list of projects
     projects_df = pd.read_csv(projects_csv)
     
-    project_n = projects_df[projects_df["Project_name"]==project_name]["Zooniverse_number"].unique()[0]
-    
     print("Connecting to the Zooniverse project")
 
     # Connect to the Zooniverse project
@@ -94,7 +92,7 @@ def retrieve_zoo_info(username: str, password: str, project_name: str, zoo_info:
         
         print(info_n, "were retrieved successfully")
 
-    return project_n, info_df
+    return info_df
 
 
 # Function to extract metadata from subjects
