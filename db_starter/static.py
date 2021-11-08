@@ -48,10 +48,7 @@ def add_movies(movies_csv, movies_path, project_name, db_path):
     # Check if the project is the KSO
     if project_name == "Koster_Seafloor_Obs":
         movies_df = koster_utils.process_koster_movies_csv(movies_df, movies_path)
-       
-    # Ensure all videos have fps, duration, starting and ending time of the survey
-    movies_df = movie_utils.get_movie_parameters(movies_df, movies_csv, project_name)
-    
+                
     # Ensure date is ISO 8601:2004(E) compatible with Darwin Data standards
     #try:
     #    date.fromisoformat(movies_df['eventDate'])
