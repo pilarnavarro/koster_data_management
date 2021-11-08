@@ -275,9 +275,6 @@ def process_koster_movies_csv(movies_df, movies_path):
 
     # Include server's path to the movie files
     movies_df["Fpath"] = movies_path + "/" + movies_df["filename"]
-
-    # Check that videos can be mapped
-    movies_df['exists'] = movies_df['Fpath'].map(os.path.isfile)
     
     return movies_df
 
