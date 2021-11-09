@@ -48,13 +48,7 @@ def add_movies(movies_csv, movies_path, project_name, db_path):
     # Check if the project is the KSO
     if project_name == "Koster_Seafloor_Obs":
         movies_df = koster_utils.process_koster_movies_csv(movies_df, movies_path)
-                
-    # Ensure date is ISO 8601:2004(E) compatible with Darwin Data standards
-    #try:
-    #    date.fromisoformat(movies_df['eventDate'])
-    #except ValueError:
-    #    print("Invalid eventDate column")
-
+    
     # Connect to database
     conn = db_utils.create_connection(db_path)
     
