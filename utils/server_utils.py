@@ -74,7 +74,7 @@ def get_sites_movies_species():
             species_csv = file
             
             
-    print("Sites, Movies and Species csv files downloaded successfully")
+    print("Sites, Movies and Species csv files loaded successfully")
     
     return sites_csv, movies_csv, species_csv
 
