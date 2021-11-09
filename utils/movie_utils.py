@@ -23,7 +23,7 @@ def get_length(video_file):
     return fps, length
 
 
-def get_movie_parameters(df, movies_csv, project_name):
+def check_movie_parameters(df, movies_csv, project_name):
     
     # Specify the parameters of the movies
     parameters = ["fps", "duration", "survey_start", "survey_end"]
@@ -38,6 +38,7 @@ def get_movie_parameters(df, movies_csv, project_name):
             
             if parameter in ["fps","duration"]:
                 
+                ##### Check if movies with missing fps/duration info can be mapped ####
                 # Add info about accessing the Spyfish movies from AWS
                 if project_name == "Spyfish_Aotearoa":
                     # Start AWS session
@@ -46,6 +47,17 @@ def get_movie_parameters(df, movies_csv, project_name):
 
                     # Check the movies are accessible
                     miss_par_df = spyfish_utils.check_spyfish_movies(miss_par_df, client)
+                
+                # Add info about accessing the Koster movies
+                if project_name == "Koster_Seafloor_Obs":
+                    # Specify the path of the movies 
+                    movies_path = "/uploads"
+                    
+                    # Include server's path to the movie files
+                    miss_par_df["Fpath"] = movies_path + "/" + miss_par_df["filename"]
+
+                    # Check that videos can be mapped
+                    miss_par_df['exists'] = miss_par_df['Fpath'].map(os.path.isfile)
                         
                 # Prevent missing parameters from movies that don't exists
                 if len(miss_par_df[~miss_par_df.exists]) > 0:
@@ -55,6 +67,7 @@ def get_movie_parameters(df, movies_csv, project_name):
 
                     return
                 
+                ##### Estimate the fps/duration of the movies ####
                 else:
                     # Check if the project is the Spyfish Aotearoa
                     if project_name == "Spyfish_Aotearoa":
@@ -89,3 +102,6 @@ def get_movie_parameters(df, movies_csv, project_name):
             return
 
     return df
+                    
+                    
+                    

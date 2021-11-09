@@ -6,6 +6,54 @@ from utils import db_utils
 from collections import OrderedDict
 from IPython.display import HTML, display, update_display, clear_output
 import ipywidgets as widgets
+from datetime import date
+
+
+def check_sites_csv(sites_csv):
+
+    # Load the csv with sites information
+    sites_df = pd.read_csv(sites_csv)
+    
+    # Select relevant fields
+    sites_df = sites_df[
+        ["site_id", "siteName", "decimalLatitude", "decimalLongitude", "geodeticDatum", "countryCode"]
+    ]
+    
+    # Roadblock to prevent empty lat/long/datum/countrycode
+    db_utils.test_table(
+        sites_df, "sites", sites_df.columns
+    )
+    
+    print("The sites.csv file doesn't have any empty fields")
+
+    
+def check_movies_csv(movies_csv, project_name):
+
+    # Load the csv with movies information
+    movies_df = pd.read_csv(movies_csv)
+    
+    # Check for missing fps, duration, survey_start and survey_end info
+    movies_df = movie_utils.check_movie_parameters(df, movies_csv, project_name)
+    
+    print("Fps, duration, survey_start and survey_end information checked")
+    
+    # Ensure date is ISO 8601:2004(E) and compatible with Darwin Data standards
+    try:
+        date.fromisoformat(movies_df['created_on'])
+    except ValueError:
+        print("Invalid eventDate column")
+
+    # Select only those fields of interest
+    movies_db = movies_df[
+        ["movie_id", "filename", "created_on", "fps", "duration", "survey_start", "survey_end", "Author", "Site_id", "Fpath"]
+    ]
+
+    # Roadblock to prevent empty information
+    db_utils.test_table(
+        movies_db, "movies", movies_db.columns
+    )
+    
+    print("The movies.csv file doesn't have any empty fields")    
 
 def upload_movies():
     
