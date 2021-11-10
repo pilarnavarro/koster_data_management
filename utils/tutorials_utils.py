@@ -25,7 +25,7 @@ def choose_server():
     
     # Select server storage
     server_i = widgets.Dropdown(
-        options=["local","S3","Chalmers"],
+        options=["local","AWS","Chalmers"],
         description='Choose server:',
         ensure_option=True,
         disabled=False,

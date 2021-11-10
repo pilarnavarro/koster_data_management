@@ -5,9 +5,9 @@ from ast import literal_eval
 from utils import db_utils
 from collections import OrderedDict
 from IPython.display import HTML, display, update_display, clear_output
-import ipywidgets as widgets
 from datetime import date
-
+import ipywidgets as widgets
+import utils.movie_utils as movie_utils
 
 def check_sites_csv(sites_csv):
 
@@ -25,27 +25,40 @@ def check_sites_csv(sites_csv):
     )
     
     print("The sites.csv file doesn't have any empty fields")
+    
+    return sites_df
 
     
-def check_movies_csv(movies_csv, project_name):
+def check_movies_csv(movies_csv, sites_df, project_name):
 
     # Load the csv with movies information
     movies_df = pd.read_csv(movies_csv)
     
-    # Check for missing fps, duration, survey_start and survey_end info
-    movies_df = movie_utils.check_movie_parameters(df, movies_csv, project_name)
+    # Check for missing fps and duration info
+    movies_df = movie_utils.check_fps_duration(movies_df, movies_csv, project_name)
     
-    print("Fps, duration, survey_start and survey_end information checked")
+    # Check for survey_start and survey_end info
+    movies_df = movie_utils.check_survey_start_end(movies_df, movies_csv)
     
     # Ensure date is ISO 8601:2004(E) and compatible with Darwin Data standards
-    try:
-        date.fromisoformat(movies_df['created_on'])
-    except ValueError:
-        print("Invalid eventDate column")
+    date_time_check = pd.to_datetime(movies_df.created_on, infer_datetime_format=True)
+    print("The last dates from the created_on column are:")
+    print(date_time_check.tail())
 
+    # Check the sites information of the movies
+    sites_df = sites_df.rename(columns={"id": "site_id"})
+
+    # Merge movies and sites dfs
+    movies_df = pd.merge(
+        movies_df, 
+        sites_df[["siteName","site_id"]], 
+        how="left", 
+        on="siteName"
+    )
+    
     # Select only those fields of interest
     movies_db = movies_df[
-        ["movie_id", "filename", "created_on", "fps", "duration", "survey_start", "survey_end", "Author", "Site_id", "Fpath"]
+        ["movie_id", "filename", "created_on", "fps", "duration", "survey_start", "survey_end", "Author", "site_id"]
     ]
 
     # Roadblock to prevent empty information
@@ -54,7 +67,11 @@ def check_movies_csv(movies_csv, project_name):
     )
     
     print("The movies.csv file doesn't have any empty fields")    
-
+    
+    return movies_df
+    
+    
+    
 def upload_movies():
     
     # Define widget to upload the files
