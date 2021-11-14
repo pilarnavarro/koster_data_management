@@ -10,19 +10,21 @@ import utils.movie_utils as movie_utils
 from tqdm import tqdm
 import subprocess
 
-def check_spyfish_movies(movies_df, client):
+def check_spyfish_movies(movies_df, client, bucket_i):
     
+    # Specify the formats of the movies to select
+    movie_formats = tuple(['wmv', 'mpg', 'mov', 'avi', 'mp4', 'MOV', 'MP4'])
+
     # Get dataframe of movies from AWS
-    zoo_contents_s3_pd_movies = server_utils.get_movies_from_aws(client, "marine-buv", "buv-zooniverse-uploads")
-    
-    # Specify the key (path in S3 of the object)
-    movies_df["Key"] = movies_df["Fpath"]
+    movies_s3_pd = get_matching_s3_keys(client, bucket_i, suffix=movie_formats)
+
+    # Specify the key of the movies (path in S3 of the object)
+    movies_df["Key"] = movies_df["prefix"] + filename
 
     # Missing info for files in the "buv-zooniverse-uploads"
-    movies_df = movies_df.merge(zoo_contents_s3_pd_movies["Key"], 
-                                                   on=['Key'], 
-                                                   how='left', 
-                                                   indicator=True)
+    movies_df = movies_df.merge(movies_s3_pd["Key"], 
+                                on=['Key'], how='left', 
+                                indicator=True)
 
     # Check that movies can be mapped
     movies_df['exists'] = np.where(movies_df["_merge"]=="left_only", False, True)
