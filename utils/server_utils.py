@@ -12,6 +12,24 @@ from pathlib import Path
 
 # Common utility functions to connect to external servers (AWS, GDrive,...)
 
+def connect_to_server(server):
+    
+    # Create an empty dictionary to host the server connections
+    server_df = {}
+    
+    if server=="AWS":
+        # Set aws account credentials
+        aws_access_key_id, aws_secret_access_key = aws_credentials()
+        
+        # Connect to S3
+        client = connect_s3(aws_access_key_id, aws_secret_access_key)
+        
+        server_df["client"] = client
+        
+        
+    return server_df
+
+
 def download_csv_from_google_drive(file_url):
 
     # Download the csv files stored in Google Drive with initial information about
@@ -145,27 +163,25 @@ def get_matching_s3_keys(client, bucket, prefix="", suffix=""):
     :param prefix: Only fetch keys that start with this prefix (optional).
     :param suffix: Only fetch keys that end with this suffix (optional).
     """
-    for obj in get_matching_s3_objects(client, bucket, prefix, suffix):
-        yield obj["Key"]
-
+    
     # Select the relevant bucket
-    s3_keys = [obj["Key"] for obj in get_matching_s3_objects(client=client, bucket=bucket_i, suffix=suffix)]
+    s3_keys = [obj["Key"] for obj in get_matching_s3_objects(client, bucket, prefix, suffix)]
 
     # Set the contents as pandas dataframe
-    contents_s3_pd = pd.DataFrame(s3_keys)
+    contents_s3_pd = pd.DataFrame(s3_keys, columns = ["Key"])
     
     return contents_s3_pd
 
 
-def retrieve_s3_buckets_info(client, bucket, suffix):
+# def retrieve_s3_buckets_info(client, bucket, suffix):
     
-    # Select the relevant bucket
-    s3_keys = [obj["Key"] for obj in get_matching_s3_objects(client=client, bucket=bucket, suffix=suffix)]
+#     # Select the relevant bucket
+#     s3_keys = [obj["Key"] for obj in get_matching_s3_objects(client=client, bucket=bucket, suffix=suffix)]
 
-    # Set the contents as pandas dataframe
-    contents_s3_pd = pd.DataFrame(s3_keys)
+#     # Set the contents as pandas dataframe
+#     contents_s3_pd = pd.DataFrame(s3_keys)
     
-    return contents_s3_pd
+#     return contents_s3_pd
 
     
 
