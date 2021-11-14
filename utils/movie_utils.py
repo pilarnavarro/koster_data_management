@@ -117,3 +117,14 @@ def check_survey_start_end(df, movies_csv):
 
     return df
                     
+    
+def get_movie_extensions():
+    # Specify the formats of the movies to select
+    movie_formats = tuple(['wmv', 'mpg', 'mov', 'avi', 'mp4', 'MOV', 'MP4'])
+    
+    return movie_formats
+
+    
+    
+    
+    
