@@ -16,3 +16,4 @@ qgrid
 gdown
 itables
 boto3
+ipyfilechooser
