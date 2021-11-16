@@ -9,6 +9,7 @@ import pandas as pd
 import ipywidgets as widgets
 import numpy as np
 import subprocess
+import datetime
 
 def select_go_pro_folder():
     # Create and display a FileChooser widget
@@ -119,8 +120,195 @@ def concatenate_go_pro_videos(siteName_i, created_on_i, go_pro_folder, go_pro_li
 
     print("Temporary files removed")
     
-    return fps, length
-           
+    video_info_dict = [fps, length, concat_video, filename_i, siteName_i, created_on_i, go_pro_list, unique_survey_name]
+    
+    return video_info_dict
+
+
+# Select author of the video
+def select_author():
+    
+    # Get the location of the csv files with initial info to populate the db
+    sites_csv, movies_csv, species_csv = server_utils.get_sites_movies_species()
+
+    # Read csv as pd
+    movies_df = pd.read_csv(movies_csv)
+    
+    # Existing authors
+    exisiting_authors = movies_df.Author.unique()
+
+    def f(Existing_or_new):
+        if Existing_or_new == 'Existing':
+            author_widget = widgets.Dropdown(
+                options = exisiting_authors,
+                description = 'Author:',
+                disabled = False
+            )
+
+        if Existing_or_new == 'New author':   
+            author_widget = widgets.Text(
+                placeholder='Type Author',
+                description='Author:',
+                disabled=False
+            )
+
+        display(author_widget)
+
+        return(author_widget)
+
+    w = interactive(f, Existing_or_new=['Existing','New author'])
+
+    display(w)
+
+    return w
+    
+def select_bad_deployment():
+    
+    def deployment_to_true_false(deploy_value):
+        if deploy_value == 'No, it is a great video':
+            return False
+        else:
+            return True
+
+    w = interactive(deployment_to_true_false, deploy_value = widgets.Dropdown(
+        options=['Yes, unfortunately it is marine crap', 'No, it is a great video'],
+            value='No, it is a great video',
+            description='Is it a bad deployment?',
+            disabled=False,
+        ))
+
+    display(w)
+
+    return w
     
     
     
+# Display in hours, minutes and seconds
+def to_hhmmss(seconds):
+    print("Time selected:", datetime.timedelta(seconds=seconds))
+    
+    return seconds
+
+def select_start_survey(duration_i):
+
+    # Select the start of the survey 
+    surv_start = interactive(to_hhmmss, seconds=widgets.IntSlider(
+        value=0,
+        min=0,
+        max=duration_i,
+        step=1,
+        description='Survey starts (seconds):',))
+
+    display(surv_start)    
+    
+    return surv_start
+ 
+    
+def select_end_survey(duration_i, surv_start_i):
+    
+    # Set default to 30 mins or max duration
+    start_plus_30 = surv_start_i+(30*60)
+    
+    if start_plus_30>duration_i:
+        default_end = duration_i
+    else:
+        default_end = start_plus_30
+    
+    
+    # Select the end of the survey 
+    surv_end = interactive(to_hhmmss, seconds=widgets.IntSlider(
+        value=default_end,
+        min=0,
+        max=duration_i,
+        step=1,
+        description='Survey ends (seconds):',))
+
+    display(surv_end)  
+    
+    return surv_end
+    
+# Select s3 folder to upload the video
+def select_s3_folder(s3_folders_available):
+
+    # Connect to s3 to get the list of folders available
+    aws_access_key_id, aws_secret_access_key = server_utils.aws_credentials()
+    client = server_utils.connect_s3(aws_access_key_id, aws_secret_access_key)
+
+    # Specify the bucket
+    bucket_i = 'marine-buv'
+    
+    # Retrieve info from the bucket
+    contents_s3_pd = server_utils.retrieve_s3_buckets_info(client, bucket_i, "")
+
+    # Extract the prefix (directory) of the objects        
+    s3_folders_available = contents_s3_pd[0].str.rsplit('/',0).str[0]
+
+    # Conver folders available df to tuple
+    s3_folders_available_tuple = tuple(s3_folders_available.unique())
+
+    # Select the s3 folder
+    s3_folder_widget = widgets.Combobox(
+                    options=s3_folders_available,
+                    description="S3 folder:",
+                    ensure_option=True,
+                    disabled=False,
+                )
+    
+    
+    display(s3_folder_widget)
+    return s3_folder_widget
+
+# Write a comment about the video
+def write_comment():
+
+    # Create the comment widget
+    comment_widget = widgets.Text(
+            placeholder='Type comment',
+            description='Comment:',
+            disabled=False
+        )
+
+    
+    display(comment_widget)
+    return comment_widget
+
+
+def review_movie_details(video_info_dict_i,
+                         IsBadDeployment_i,
+                         survey_start_i,
+                         survey_end_i,
+                         author_i = str,
+                         bucket_i = str,
+                         comment_i,
+                         s3_prefix_i,
+                        ):
+    
+    # Get the location of the csv files with initial info to populate the db
+    sites_csv, movies_csv, species_csv = server_utils.get_sites_movies_species()
+
+    # Add movie id
+    movies_df = pd.read_csv(movies_csv)
+    movie_id_i = 1 + movies_df.movie_id.iloc[-1]
+    
+    # Save the prefix (s3 path) to upload the video
+    prefix_i = s3_prefix + "/" + video_info_dict["unique_survey_name"]
+
+    row_i = [[movie_id_i, 
+              video_info_dict_i["filename_i"], 
+              video_info_dict_i["siteName_i"],
+              video_info_dict_i["created_on_i"],
+              author_i,
+              video_info_dict_i["fps_i"],
+              video_info_dict_i["duration_i"],
+              survey_start_i, 
+              survey_end_i,
+              go_pro_list_i, 
+              bucket_i,
+              prefix_i, 
+              IsBadDeployment_i, 
+              comment_i]]
+    
+    new_row = pd.DataFrame(row_i, columns = movies_df.columns)
+    
+    return new_row
+
