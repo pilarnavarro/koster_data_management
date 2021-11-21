@@ -124,7 +124,6 @@ def get_movie_extensions():
     
     return movie_formats
 
-    
-    
+
     
     
