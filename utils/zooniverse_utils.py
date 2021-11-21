@@ -94,7 +94,7 @@ def retrieve_zoo_info(username: str, password: str, project_name: str, zoo_info:
         
         print(info_n, "were retrieved successfully")
 
-    return info_df
+    return info_df, project
 
 
 # Function to extract metadata from subjects
