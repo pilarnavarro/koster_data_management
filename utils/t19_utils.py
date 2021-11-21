@@ -238,7 +238,7 @@ def select_s3_folder(s3_folders_available):
     bucket_i = 'marine-buv'
     
     # Retrieve info from the bucket
-    contents_s3_pd = server_utils.retrieve_s3_buckets_info(client, bucket_i, "")
+    contents_s3_pd = server_utils.get_matching_s3_keys(client, bucket_i, "")
 
     # Extract the prefix (directory) of the objects        
     s3_folders_available = contents_s3_pd[0].str.rsplit('/',0).str[0]
