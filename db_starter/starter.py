@@ -8,14 +8,6 @@ def main():
     "Handles argument parsing and launches the correct function."
     parser = argparse.ArgumentParser()
     parser.add_argument(
-        "-mp",
-        "--movies_path",
-        type=str,
-        help="the absolute path to the movie files",
-        default=r"/uploads",
-        required=False,
-    )
-    parser.add_argument(
         "-db",
         "--db_path",
         type=str,
@@ -38,7 +30,7 @@ def main():
     init_db(args.db_path)
     
     # Populate the db with initial info from csv files
-    static_setup(args.movies_path, args.project_name, args.db_path)
+    static_setup(args.project_name, args.db_path)
     
     
 if __name__ == "__main__":

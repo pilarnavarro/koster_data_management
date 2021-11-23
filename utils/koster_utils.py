@@ -266,15 +266,15 @@ def process_clips_koster(annotations, row_class_id, rows_list):
     return rows_list
 
 
-def process_koster_movies_csv(movies_df, movies_path):
+def process_koster_movies_csv(movies_df):
     # Standarise the filename
     movies_df["filename"] = movies_df["filename"].str.normalize("NFD")
 
     # Unswedify the filename
     movies_df["filename"] = movies_df["filename"].apply(lambda x: unswedify(x))
 
-    # Include server's path to the movie files
-    movies_df["Fpath"] = movies_path + "/" + movies_df["filename"]
+    # TO DO Include server's path to the movie files
+    movies_df["Fpath"] = movies_df["filename"]
     
     return movies_df
 

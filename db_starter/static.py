@@ -3,7 +3,7 @@ import operator, argparse, requests
 import pandas as pd
 import sqlite3
 from datetime import datetime
-from utils.server_utils import get_sites_movies_species
+import utils.server_utils as server_utils
 import utils.db_utils as db_utils
 import utils.koster_utils as koster_utils
 import utils.spyfish_utils as spyfish_utils
@@ -32,7 +32,7 @@ def add_sites(sites_csv, db_path):
     )
 
     
-def add_movies(movies_csv, movies_path, project_name, db_path):
+def add_movies(movies_csv, project_name, db_path):
 
     # Load the csv with movies information
     movies_df = pd.read_csv(movies_csv)
@@ -47,7 +47,7 @@ def add_movies(movies_csv, movies_path, project_name, db_path):
             
     # Check if the project is the KSO
     if project_name == "Koster_Seafloor_Obs":
-        movies_df = koster_utils.process_koster_movies_csv(movies_df, movies_path)
+        movies_df = koster_utils.process_koster_movies_csv(movies_df)
     
     # Connect to database
     conn = db_utils.create_connection(db_path)
@@ -98,13 +98,12 @@ def add_species(species_csv, db_path):
     )
     
 
-def static_setup(movies_path: str,
-                 project_name: str,
+def static_setup(project_name: str,
                  db_path: str):   
     
     # Get the location of the csv files with initial info to populate the db
-    sites_csv, movies_csv, species_csv = get_sites_movies_species()
+    db_initial_info = server_utils.get_db_init_info(project_name)
     
-    add_sites(sites_csv, db_path)
-    add_movies(movies_csv, movies_path, project_name, db_path)
-    add_species(species_csv, db_path)
+    add_sites(db_initial_info["sites_csv"], db_path)
+    add_movies(db_initial_info["movies_csv"], project_name, db_path)
+    add_species(db_initial_info["species_csv"], db_path)

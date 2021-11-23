@@ -65,36 +65,87 @@ def download_init_csv(gdrive_id, db_csv_info):
     os.remove(zip_file)
     
     
-def get_sites_movies_species():
+def get_db_init_info(project_name):
     
     # Define the path to the csv files with initial info to build the db
-    db_csv_info = "../db_starter/db_csv_info/" 
+    db_csv_info = "../db_starter/db_csv_info/"
+        
+    if project_name == "Spyfish_Aotearoa":
+        
+        # Start AWS session
+        aws_access_key_id, aws_secret_access_key = server_utils.aws_credentials()
+        client = server_utils.connect_s3(aws_access_key_id, aws_secret_access_key)
+        
+        # Download csv files from AWS
+        sites_csv = "sites_buv_doc.csv"
+        movies_csv = "movies_buv_doc.csv"
+        species_csv = "species_buv_doc.csv"
+        
+        download_object_from_s3(client,
+                                bucket='marine-buv',
+                                key="init_db_doc_buv/"+sites_csv, 
+                                filename=db_csv_info+sites_csv)
+        download_object_from_s3(client,
+                                bucket='marine-buv',
+                                key="init_db_doc_buv/"+movies_csv, 
+                                filename=db_csv_info+movies_csv)
+        download_object_from_s3(client,
+                                bucket='marine-buv',
+                                key="init_db_doc_buv/"+species_csv, 
+                                filename=db_csv_info+species_csv)
+        
+        
+        db_initial_info = {client, sites_csv, movies_csv, species_csv}
+        
+                
+    if project_name == "Koster_Seafloor_Obs":
+        #WIP
+        print("WIP")
     
-    # Check if the directory db_csv_info exists
-    if not os.path.exists(db_csv_info) or len(os.listdir(db_csv_info)) == 0:
-        
-        print("There is no folder with initial information about the sites, movies and species.\n Please enter the ID of a Google Drive zipped folder with the inital database information. \n For example, the ID of the template information is: 1PZGRoSY_UpyLfMhRphMUMwDXw4yx1_Fn")
-        
-        # Provide ID of the GDrive zipped folder with the init. database information
-        gdrive_id = getpass.getpass('ID of Google Drive zipped folder')
-        
-        # Download the csv files
-        download_init_csv(gdrive_id, db_csv_info)
-        
-        
-    # Define the path to the csv files with inital info to build the db
-    for file in Path(db_csv_info).rglob("*.csv"):
-        if 'sites' in file.name:
-            sites_csv = file
-        if 'movies' in file.name:
-            movies_csv = file
-        if 'species' in file.name:
-            species_csv = file
+    else:
+        # Check if the directory db_csv_info exists
+        if not os.path.exists(db_csv_info) or len(os.listdir(db_csv_info)) == 0:
+
+            print("There is no folder with initial information about the sites, movies and species.\n Please enter the ID of a Google Drive zipped folder with the inital database information. \n For example, the ID of the template information is: 1PZGRoSY_UpyLfMhRphMUMwDXw4yx1_Fn")
+
+            # Provide ID of the GDrive zipped folder with the init. database information
+            gdrive_id = getpass.getpass('ID of Google Drive zipped folder')
+
+            # Download the csv files
+            download_init_csv(gdrive_id, db_csv_info)
+
+
+        # Define the path to the csv files with inital info to build the db
+        for file in Path(db_csv_info).rglob("*.csv"):
+            if 'sites' in file.name:
+                sites_csv = file
+            if 'movies' in file.name:
+                movies_csv = file
+            if 'species' in file.name:
+                species_csv = file
+            
+        db_initial_info = {sites_csv, movies_csv, species_csv}    
+    
+    return db_initial_info
+
+
+def update_db_init_info(project_name, csv_to_update):
+    
+    if project_name == "Spyfish_Aotearoa":
+            
+        # Start AWS session
+        aws_access_key_id, aws_secret_access_key = server_utils.aws_credentials()
+        client = server_utils.connect_s3(aws_access_key_id, aws_secret_access_key)
+
+
+        csv_filename=csv_to_update.name
+
+        upload_file_to_s3(client,
+                              bucket='marine-buv',
+                              key="init_db_doc_buv/"+csv_filename,
+                              filename=str(csv_to_update))
             
             
-    #print("Sites, Movies and Species csv files loaded successfully")
-    
-    return sites_csv, movies_csv, species_csv
 
 
 def aws_credentials():
