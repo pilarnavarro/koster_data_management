@@ -102,9 +102,9 @@ def get_db_init_info(project_name):
         
         db_initial_info = {
             "client": client, 
-            "sites_csv": sites_csv, 
-            "movies_csv": movies_csv, 
-            "species_csv": species_csv
+            "sites_csv": db_csv_info+sites_csv, 
+            "movies_csv": db_csv_info+movies_csv, 
+            "species_csv": db_csv_info+species_csv
         }
         
                 
