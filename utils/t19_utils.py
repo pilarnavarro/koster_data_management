@@ -1,6 +1,6 @@
 import os
 from ipyfilechooser import FileChooser
-from IPython.display import display 
+from ipywidgets import interactive, Layout
 from ipywidgets import interactive
 
 import utils.movie_utils as movie_utils
@@ -33,13 +33,10 @@ def select_go_pro_movies(go_pro_folder):
     
 
 # Select site and date of the video
-def select_site():
+def select_site(db_initial_info):
     
-    # Get the location of the csv files with initial info to populate the db
-    sites_csv, movies_csv, species_csv = server_utils.get_sites_movies_species()
-
     # Read csv as pd
-    sitesdf = pd.read_csv(sites_csv)
+    sitesdf = pd.read_csv(db_initial_info["sites_csv"])
 
     # Existing sites
     exisiting_sites = sitesdf.siteName.unique()
@@ -49,32 +46,46 @@ def select_site():
             site_widget = widgets.Dropdown(
                 options = exisiting_sites,
                 description = 'Site:',
-                disabled = False
+                disabled = False,
+                layout=Layout(width='50%'),
+                style = {'description_width': 'initial'}
             )
-
+            
         if Existing_or_new == 'New site':   
             site_widget = widgets.Text(
                 placeholder='Type sitename',
                 description='Sitename:',
-                disabled=False
+                disabled=False,
+                layout=Layout(width='50%'),
+                style = {'description_width': 'initial'}
             )
 
         display(site_widget)
 
-        return(site_widget)
+        return site_widget
 
-    w = interactive(f, Existing_or_new=['Existing','New site'])
+    w = interactive(f, 
+                    Existing_or_new = widgets.Dropdown(
+                        options = ['Existing','New site'],
+                        description = 'Existing or new:',
+                        disabled = False,
+                        layout=Layout(width='50%'),
+                        style = {'description_width': 'initial'}
+                    )
+                   )
 
     display(w)
     
     return w
-    
+
 def select_date():
     
     # Select the date 
     date_widget = widgets.DatePicker(
         description='Start Date',
-        disabled=False
+        disabled=False,
+        layout=Layout(width='50%'),
+        style = {'description_width': 'initial'}
     )
     
     
@@ -120,19 +131,25 @@ def concatenate_go_pro_videos(siteName_i, created_on_i, go_pro_folder, go_pro_li
 
     print("Temporary files removed")
     
-    video_info_dict = [fps, length, concat_video, filename_i, siteName_i, created_on_i, go_pro_list, unique_survey_name]
+    video_info_dict = {
+        "fps": fps, 
+        "length": length, 
+        "concat_video": concat_video, 
+        "filename_i": filename_i, 
+        "siteName_i": siteName_i, 
+        "created_on_i": created_on_i, 
+        "go_pro_list": go_pro_list, 
+        "unique_survey_name": unique_survey_name
+    }
     
     return video_info_dict
 
 
 # Select author of the video
-def select_author():
+def select_author(db_initial_info):
     
-    # Get the location of the csv files with initial info to populate the db
-    sites_csv, movies_csv, species_csv = server_utils.get_sites_movies_species()
-
     # Read csv as pd
-    movies_df = pd.read_csv(movies_csv)
+    movies_df = pd.read_csv(db_initial_info["movies_csv"])
     
     # Existing authors
     exisiting_authors = movies_df.Author.unique()
@@ -142,21 +159,33 @@ def select_author():
             author_widget = widgets.Dropdown(
                 options = exisiting_authors,
                 description = 'Author:',
-                disabled = False
+                disabled = False,
+                layout=Layout(width='50%'),
+                style = {'description_width': 'initial'}
             )
 
         if Existing_or_new == 'New author':   
             author_widget = widgets.Text(
                 placeholder='Type Author',
                 description='Author:',
-                disabled=False
+                disabled=False,
+                layout=Layout(width='50%'),
+                style = {'description_width': 'initial'}
             )
 
         display(author_widget)
 
         return(author_widget)
 
-    w = interactive(f, Existing_or_new=['Existing','New author'])
+    w = interactive(f,
+                    Existing_or_new = widgets.Dropdown(
+                        options = ['Existing','New author'],
+                        description = 'Existing or new:',
+                        disabled = False,
+                        layout=Layout(width='50%'),
+                        style = {'description_width': 'initial'}
+                    )
+                   )
 
     display(w)
 
@@ -175,6 +204,8 @@ def select_bad_deployment():
             value='No, it is a great video',
             description='Is it a bad deployment?',
             disabled=False,
+            layout=Layout(width='50%'),
+            style = {'description_width': 'initial'}
         ))
 
     display(w)
@@ -197,7 +228,9 @@ def select_start_survey(duration_i):
         min=0,
         max=duration_i,
         step=1,
-        description='Survey starts (seconds):',))
+        description='Survey starts (seconds):',
+        layout=Layout(width='50%'),
+        style = {'description_width': 'initial'}))
 
     display(surv_start)    
     
@@ -221,24 +254,22 @@ def select_end_survey(duration_i, surv_start_i):
         min=0,
         max=duration_i,
         step=1,
-        description='Survey ends (seconds):',))
+        description='Survey ends (seconds):',
+        layout=Layout(width='50%'),
+        style = {'description_width': 'initial'}))
 
     display(surv_end)  
     
     return surv_end
     
 # Select s3 folder to upload the video
-def select_s3_folder(s3_folders_available):
-
-    # Connect to s3 to get the list of folders available
-    aws_access_key_id, aws_secret_access_key = server_utils.aws_credentials()
-    client = server_utils.connect_s3(aws_access_key_id, aws_secret_access_key)
+def select_s3_folder(db_initial_info):
 
     # Specify the bucket
     bucket_i = 'marine-buv'
     
     # Retrieve info from the bucket
-    contents_s3_pd = server_utils.get_matching_s3_keys(client, bucket_i, "")
+    contents_s3_pd = server_utils.get_matching_s3_keys(db_initial_info["client"], bucket_i, "")
 
     # Extract the prefix (directory) of the objects        
     s3_folders_available = contents_s3_pd[0].str.rsplit('/',0).str[0]
@@ -265,7 +296,9 @@ def write_comment():
     comment_widget = widgets.Text(
             placeholder='Type comment',
             description='Comment:',
-            disabled=False
+            disabled=False,
+            layout=Layout(width='50%'),
+            style = {'description_width': 'initial'}
         )
 
     
@@ -277,8 +310,8 @@ def review_movie_details(video_info_dict_i,
                          IsBadDeployment_i,
                          survey_start_i,
                          survey_end_i,
-                         author_i = str,
-                         bucket_i = str,
+                         author_i,
+                         bucket_i,
                          comment_i,
                          s3_prefix_i,
                         ):
