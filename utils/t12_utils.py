@@ -151,8 +151,10 @@ def choose_w_version(workflows_df, workflow_id):
 
 
 def get_classifications(
-    workflow_id: int, workflow_version: float, subj_type, class_df, db_path
+    workflow_id: int, workflow_version: float, subj_type, class_df, project_name
 ):
+    # Get the project-specific name of the database
+    db_path = get_project_info(project_name, "db_path")
     
     # Filter classifications of interest
     class_df = class_df[

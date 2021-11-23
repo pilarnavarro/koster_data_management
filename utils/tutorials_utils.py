@@ -2,6 +2,19 @@ import pandas as pd
 import ipywidgets as widgets
 
 
+def get_project_info(project_name, info_interest):
+    # Specify location of the latest list of projects
+    projects_csv = "../db_starter/projects_list.csv" 
+    
+    # Read the latest list of projects
+    projects_df = pd.read_csv(projects_csv)
+    
+    # Get the info_interest from the project info
+    project_info = projects_df[projects_df["Project_name"]==project_name][info_interest].unique()[0]
+    
+    return project_info
+
+    
 def choose_project():
     
     # Specify location of the latest list of projects

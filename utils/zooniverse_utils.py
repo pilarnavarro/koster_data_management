@@ -15,6 +15,8 @@ from ast import literal_eval
 from utils.koster_utils import process_koster_subjects, clean_duplicated_subjects, combine_annot_from_duplicates
 from utils.spyfish_utils import process_spyfish_subjects
 import utils.db_utils as db_utils
+import utils.tutorials_utils as tutorials_utils
+    
 
 def zoo_credentials():
     zoo_user = getpass.getpass('Enter your Zooniverse user')
@@ -45,14 +47,8 @@ def auth_session(username, password, project_n):
 # Function to retrieve information from Zooniverse
 def retrieve_zoo_info(username: str, password: str, project_name: str, zoo_info: str):
 
-    # Specify location of the latest list of projects
-    projects_csv = "../db_starter/projects_list.csv" 
-    
-    # Read the latest list of projects
-    projects_df = pd.read_csv(projects_csv)
-    
     # Get the number of the Zooniverse project
-    project_n = projects_df[projects_df["Project_name"]==project_name]["Zooniverse_number"].unique()[0]
+    project_n = tutorials_utils.get_project_info(project_name, "Zooniverse_number")
     print("Connecting to the Zooniverse project")
 
     # Connect to the Zooniverse project
@@ -117,8 +113,11 @@ def extract_metadata(subj_df):
     return subj_df, meta_df
 
 
-def populate_subjects(subjects, project_name, db_path):
+def populate_subjects(subjects, project_name):
 
+    # Get the project-specific name of the database
+    db_path = get_project_info(project_name, "db_path")
+    
     # Check if the Zooniverse project is the KSO
     if project_name == "Koster_Seafloor_Obs":
 
@@ -185,8 +184,11 @@ def populate_subjects(subjects, project_name, db_path):
     print("The database has a total of", frame_subjs, "frame subjects and", clip_subjs, "clip subjects have been updated")
 
 # Relevant for ML and upload frames tutorials
-def populate_agg_annotations(annotations, subj_type, db_path):
+def populate_agg_annotations(annotations, subj_type, project_name):
 
+    # Get the project-specific name of the database
+    db_path = get_project_info(project_name, "db_path")
+    
     conn = db_utils.create_connection(db_path)
     
     # Query id and subject type from the subjects table

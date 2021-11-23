@@ -1,4 +1,4 @@
-Project_name,Zooniverse_number
-Koster_Seafloor_Obs,9747
-Spyfish_Aotearoa,14054
-SGU,NAN
+Project_name,Zooniverse_number,db_path
+Koster_Seafloor_Obs,9747,koster_lab.db
+Spyfish_Aotearoa,14054,spyfish_aot.db
+SGU,NAN,sgu.db

@@ -1,4 +1,5 @@
 import os, io
+import os
 import requests
 import pandas as pd
 import numpy as np
@@ -73,14 +74,18 @@ def get_db_init_info(project_name):
     if project_name == "Spyfish_Aotearoa":
         
         # Start AWS session
-        aws_access_key_id, aws_secret_access_key = server_utils.aws_credentials()
-        client = server_utils.connect_s3(aws_access_key_id, aws_secret_access_key)
+        aws_access_key_id, aws_secret_access_key = aws_credentials()
+        client = connect_s3(aws_access_key_id, aws_secret_access_key)
         
         # Download csv files from AWS
         sites_csv = "sites_buv_doc.csv"
         movies_csv = "movies_buv_doc.csv"
         species_csv = "species_buv_doc.csv"
         
+        # Create the folder to store the concatenated videos if not exist
+        if not os.path.exists(db_csv_info):
+            os.mkdir(db_csv_info)
+            
         download_object_from_s3(client,
                                 bucket='marine-buv',
                                 key="init_db_doc_buv/"+sites_csv, 
@@ -95,7 +100,12 @@ def get_db_init_info(project_name):
                                 filename=db_csv_info+species_csv)
         
         
-        db_initial_info = {client, sites_csv, movies_csv, species_csv}
+        db_initial_info = {
+            "client": client, 
+            "sites_csv": sites_csv, 
+            "movies_csv": movies_csv, 
+            "species_csv": species_csv
+        }
         
                 
     if project_name == "Koster_Seafloor_Obs":
@@ -124,7 +134,12 @@ def get_db_init_info(project_name):
             if 'species' in file.name:
                 species_csv = file
             
-        db_initial_info = {sites_csv, movies_csv, species_csv}    
+        db_initial_info = {
+            "sites_csv": sites_csv, 
+            "movies_csv": movies_csv, 
+            "species_csv": species_csv
+        }
+           
     
     return db_initial_info
 
