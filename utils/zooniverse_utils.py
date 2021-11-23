@@ -55,7 +55,9 @@ def retrieve_zoo_info(username: str, password: str, project_name: str, zoo_info:
     project = auth_session(username, password, project_n)
 
     # Create an empty dictionary to host the dfs of interest
-    info_df = {}
+    info_df = {
+        "project": project
+    }
 
     for info_n in zoo_info:
         print("Retrieving", info_n, "from Zooniverse")
@@ -90,7 +92,7 @@ def retrieve_zoo_info(username: str, password: str, project_name: str, zoo_info:
         
         print(info_n, "were retrieved successfully")
 
-    return info_df, project
+    return info_df
 
 
 # Function to extract metadata from subjects
@@ -116,7 +118,7 @@ def extract_metadata(subj_df):
 def populate_subjects(subjects, project_name):
 
     # Get the project-specific name of the database
-    db_path = get_project_info(project_name, "db_path")
+    db_path = tutorials_utils.get_project_info(project_name, "db_path")
     
     # Check if the Zooniverse project is the KSO
     if project_name == "Koster_Seafloor_Obs":
@@ -187,7 +189,7 @@ def populate_subjects(subjects, project_name):
 def populate_agg_annotations(annotations, subj_type, project_name):
 
     # Get the project-specific name of the database
-    db_path = get_project_info(project_name, "db_path")
+    db_path = tutorials_utils.get_project_info(project_name, "db_path")
     
     conn = db_utils.create_connection(db_path)
     

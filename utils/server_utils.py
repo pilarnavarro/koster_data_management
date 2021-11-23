@@ -109,10 +109,6 @@ def get_db_init_info(project_name):
         
                 
     if project_name == "Koster_Seafloor_Obs":
-        #WIP
-        print("WIP")
-    
-    else:
         # Check if the directory db_csv_info exists
         if not os.path.exists(db_csv_info) or len(os.listdir(db_csv_info)) == 0:
 
@@ -139,6 +135,7 @@ def get_db_init_info(project_name):
             "movies_csv": movies_csv, 
             "species_csv": species_csv
         }
+        
            
     
     return db_initial_info

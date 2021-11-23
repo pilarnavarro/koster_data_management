@@ -1,11 +1,13 @@
 import pandas as pd
 import numpy as np
 import json, io
+
 from ast import literal_eval
 from utils.zooniverse_utils import auth_session
 import utils.db_utils as db_utils
 from utils.koster_utils import filter_bboxes, process_clips_koster
 from utils.spyfish_utils import process_clips_spyfish
+import utils.tutorials_utils as tutorials_utils
 from utils import db_utils
 from collections import OrderedDict, Counter
 from IPython.display import HTML, display, update_display, clear_output
@@ -154,7 +156,7 @@ def get_classifications(
     workflow_id: int, workflow_version: float, subj_type, class_df, project_name
 ):
     # Get the project-specific name of the database
-    db_path = get_project_info(project_name, "db_path")
+    db_path = tutorials_utils.get_project_info(project_name, "db_path")
     
     # Filter classifications of interest
     class_df = class_df[

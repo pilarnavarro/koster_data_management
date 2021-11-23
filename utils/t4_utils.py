@@ -23,13 +23,16 @@ from panoptes_client import (
 )
 
     
-def retrieve_zoo_clips_info(project_name, db_path, zoo_info):
+def retrieve_zoo_clips_info(project_name, zoo_info):
     
     # Save your Zooniverse user name and password.
     zoo_user, zoo_pass = zooniverse_utils.zoo_credentials()
     
-    # Connect to the Zooniverse project (our BUV project # is 14054)
-    project = Project(14054)
+    # Get the project-specific zooniverse number
+    project_n = get_project_info(project_name, "Zooniverse_number")
+    
+    # Connect to the Zooniverse project
+    project = Project(project_n)
 
     # Retrieve and store the Zooniverse information required throughout the tutorial in a dictionary
     zoo_clips_info_dict, project = zooniverse_utils.retrieve_zoo_info(zoo_user, zoo_pass, project_name, zoo_info)
@@ -38,9 +41,7 @@ def retrieve_zoo_clips_info(project_name, db_path, zoo_info):
     zoo_clips_info_dict["zoo_pass"] = zoo_pass
     
     # Populate the sql with subjects uploaded to Zooniverse
-    zooniverse_utils.populate_subjects(zoo_clips_info_dict["subjects"], project_name, db_path)
-    
-    # Connection to the Zoo project
+    zooniverse_utils.populate_subjects(zoo_clips_info_dict["subjects"], project_name)
     
     
     return zoo_clips_info_dict, project
@@ -102,8 +103,11 @@ def movie_to_upload(available_movies_df):
     return movie_to_upload_widget
 
 
-def check_movie_uploaded(db_path, movie_i):
+def check_movie_uploaded(project_name, movie_i):
 
+    # Get the project-specific name of the database
+    db_path = get_project_info(project_name, "db_path")
+    
     # Create connection to db
     conn = db_utils.create_connection(db_path)
 
