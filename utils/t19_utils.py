@@ -1,7 +1,6 @@
 import os
 from ipyfilechooser import FileChooser
 from ipywidgets import interactive, Layout
-from ipywidgets import interactive
 
 import utils.movie_utils as movie_utils
 import utils.server_utils as server_utils
@@ -67,7 +66,7 @@ def select_site(db_initial_info):
     w = interactive(f, 
                     Existing_or_new = widgets.Dropdown(
                         options = ['Existing','New site'],
-                        description = 'Existing or new:',
+                        description = 'Existing or new site:',
                         disabled = False,
                         layout=Layout(width='50%'),
                         style = {'description_width': 'initial'}
@@ -82,7 +81,7 @@ def select_date():
     
     # Select the date 
     date_widget = widgets.DatePicker(
-        description='Start Date',
+        description='Date of recording',
         disabled=False,
         layout=Layout(width='50%'),
         style = {'description_width': 'initial'}
@@ -128,8 +127,6 @@ def concatenate_go_pro_videos(siteName_i, created_on_i, go_pro_folder, go_pro_li
         
     # Update the fps and length info
     fps, length = movie_utils.get_length(concat_video)
-
-    print("Temporary files removed")
     
     video_info_dict = {
         "fps": fps, 
@@ -141,6 +138,8 @@ def concatenate_go_pro_videos(siteName_i, created_on_i, go_pro_folder, go_pro_li
         "go_pro_list": go_pro_list, 
         "unique_survey_name": unique_survey_name
     }
+    
+    print("Open", video_info_dict["concat_video"], "to check the required information for the next sections")
     
     return video_info_dict
 
@@ -180,7 +179,7 @@ def select_author(db_initial_info):
     w = interactive(f,
                     Existing_or_new = widgets.Dropdown(
                         options = ['Existing','New author'],
-                        description = 'Existing or new:',
+                        description = 'Existing or new Author:',
                         disabled = False,
                         layout=Layout(width='50%'),
                         style = {'description_width': 'initial'}
@@ -237,20 +236,20 @@ def select_start_survey(duration_i):
     return surv_start
  
     
-def select_end_survey(duration_i, surv_start_i):
+def select_end_survey(duration_i):
     
-    # Set default to 30 mins or max duration
-    start_plus_30 = surv_start_i+(30*60)
+#     # Set default to 30 mins or max duration
+#     start_plus_30 = surv_start_i+(30*60)
     
-    if start_plus_30>duration_i:
-        default_end = duration_i
-    else:
-        default_end = start_plus_30
+#     if start_plus_30>duration_i:
+#         default_end = duration_i
+#     else:
+#         default_end = start_plus_30
     
     
     # Select the end of the survey 
     surv_end = interactive(to_hhmmss, seconds=widgets.IntSlider(
-        value=default_end,
+        value=duration_i,
         min=0,
         max=duration_i,
         step=1,
@@ -263,23 +262,20 @@ def select_end_survey(duration_i, surv_start_i):
     return surv_end
     
 # Select s3 folder to upload the video
-def select_s3_folder(db_initial_info):
+def select_s3_folder(db_info_dict):
 
     # Specify the bucket
     bucket_i = 'marine-buv'
     
     # Retrieve info from the bucket
-    contents_s3_pd = server_utils.get_matching_s3_keys(db_initial_info["client"], bucket_i, "")
+    contents_s3_pd = server_utils.get_matching_s3_keys(db_info_dict["client"], bucket_i, "")
 
     # Extract the prefix (directory) of the objects        
-    s3_folders_available = contents_s3_pd[0].str.rsplit('/',0).str[0]
-
-    # Conver folders available df to tuple
-    s3_folders_available_tuple = tuple(s3_folders_available.unique())
+    s3_folders_available = contents_s3_pd["Key"].str.split("/").str[0]
 
     # Select the s3 folder
     s3_folder_widget = widgets.Combobox(
-                    options=s3_folders_available,
+                    options=tuple(s3_folders_available.unique()),
                     description="S3 folder:",
                     ensure_option=True,
                     disabled=False,
@@ -306,33 +302,36 @@ def write_comment():
     return comment_widget
 
 
-def review_movie_details(video_info_dict_i,
+def review_movie_details(project_name,
+                         video_info_dict_i,
+                         db_info_dict,
                          IsBadDeployment_i,
                          survey_start_i,
                          survey_end_i,
+                         go_pro_list_i,
                          author_i,
                          bucket_i,
                          comment_i,
                          s3_prefix_i,
                         ):
     
-    # Get the location of the csv files with initial info to populate the db
-    sites_csv, movies_csv, species_csv = server_utils.get_sites_movies_species()
-
+    # Get the latest csv files from the AWS
+    db_initial_info = server_utils.get_db_init_info(project_name, db_info_dict)
+      
     # Add movie id
-    movies_df = pd.read_csv(movies_csv)
+    movies_df = pd.read_csv(db_initial_info["movies_csv"])
     movie_id_i = 1 + movies_df.movie_id.iloc[-1]
     
     # Save the prefix (s3 path) to upload the video
-    prefix_i = s3_prefix + "/" + video_info_dict["unique_survey_name"]
+    prefix_i = s3_prefix_i + "/" + video_info_dict_i["unique_survey_name"]
 
     row_i = [[movie_id_i, 
               video_info_dict_i["filename_i"], 
               video_info_dict_i["siteName_i"],
               video_info_dict_i["created_on_i"],
               author_i,
-              video_info_dict_i["fps_i"],
-              video_info_dict_i["duration_i"],
+              video_info_dict_i["fps"],
+              video_info_dict_i["length"],
               survey_start_i, 
               survey_end_i,
               go_pro_list_i, 
@@ -343,5 +342,35 @@ def review_movie_details(video_info_dict_i,
     
     new_row = pd.DataFrame(row_i, columns = movies_df.columns)
     
-    return new_row
+    # Add row to movies_df
+    movies_df = movies_df.append(new_row, ignore_index=True)
+    
+    return new_row, movies_df
+
+
+def upload_concat_movie(new_row, db_info_dict, video_info_dict, movies_df):
+    
+    # Specify the location of the movie in the s3
+    key_filename = new_row.prefix[0] + "/" + new_row.filename[0]
+
+    # Upload movie to the s3 bucket
+    server_utils.upload_file_to_s3(client = db_info_dict["client"],
+                                   bucket = new_row.bucket[0], 
+                                   key = key_filename, 
+                                   filename = video_info_dict["concat_video"])
+
+    # Temporarily save the movies df as csv
+    path_movies_csv = "movies_buv_doc.csv"
+    movies_df.to_csv(path_movies_csv, index=False)
+
+    # Upload the movies updated csv to the s3 bucket
+    server_utils.upload_file_to_s3(client = db_info_dict["client"],
+                                   bucket = new_row.bucket[0],
+                                   key = "init_db_doc_buv/movies_buv_doc.csv",
+                                   filename = path_movies_csv)
+
+    # Remove temporary csv
+    os.remove(path_movies_csv)
+
+    # Remove temporary movie
 

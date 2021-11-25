@@ -1,5 +1,5 @@
 #t4 utils
-import os
+import os, shutil
 import pandas as pd
 import numpy as np
 import math
@@ -8,13 +8,15 @@ import subprocess
 
 from tqdm import tqdm
 from IPython.display import HTML, display, update_display, clear_output
-from ipywidgets import interact, interactive
+from ipywidgets import interact, interactive, Layout
 from utils.zooniverse_utils import auth_session
 import ipywidgets as widgets
+
 import utils.db_utils as db_utils
 import utils.zooniverse_utils as zooniverse_utils
 import utils.movie_utils as movie_utils
 import utils.server_utils as server_utils
+import utils.tutorials_utils as tutorials_utils
 from panoptes_client import (
     SubjectSet,
     Subject,
@@ -22,57 +24,30 @@ from panoptes_client import (
     Panoptes,
 )
 
-    
-def retrieve_zoo_clips_info(project_name, zoo_info):
-    
-    # Save your Zooniverse user name and password.
-    zoo_user, zoo_pass = zooniverse_utils.zoo_credentials()
-    
-    # Get the project-specific zooniverse number
-    project_n = get_project_info(project_name, "Zooniverse_number")
-    
-    # Connect to the Zooniverse project
-    project = Project(project_n)
 
-    # Retrieve and store the Zooniverse information required throughout the tutorial in a dictionary
-    zoo_clips_info_dict, project = zooniverse_utils.retrieve_zoo_info(zoo_user, zoo_pass, project_name, zoo_info)
+def retrieve_movie_info_from_server(project_name, db_info_dict):
     
-    zoo_clips_info_dict["zoo_user"] = zoo_user
-    zoo_clips_info_dict["zoo_pass"] = zoo_pass
-    
-    # Populate the sql with subjects uploaded to Zooniverse
-    zooniverse_utils.populate_subjects(zoo_clips_info_dict["subjects"], project_name)
-    
-    
-    return zoo_clips_info_dict, project
+    if project_name == "Spyfish_Aotearoa":
+        # Specify the bucket
+        bucket_i = 'marine-buv'
 
-
-def retrieve_movie_info_from_server(server_i):
+        # Retrieve info from the bucket
+        movies_s3_pd = server_utils.get_matching_s3_keys(client = db_info_dict["client"], 
+                                                         bucket = bucket_i, 
+                                                         suffix = movie_utils.get_movie_extensions())
     
-    # Connect to the server
-    server_i_dict = server_utils.connect_to_server(server_i)
-    
-    # Specify the bucket
-    bucket_i = 'marine-buv'
+        # Create connection to db
+        conn = db_utils.create_connection(db_info_dict["db_path"])
 
-    # Retrieve info from the bucket
-    movies_s3_pd = server_utils.get_matching_s3_keys(client = server_i_dict["client"], 
-                                                     bucket = bucket_i, 
-                                                     suffix=movie_utils.get_movie_extensions())
-    
-    # Get the location of the csv files with initial info to populate the db
-    sites_csv, movies_csv, species_csv = server_utils.get_sites_movies_species()
+        # Query info about the movie of interest
+        movies_df = pd.read_sql_query(f"SELECT * FROM movies", conn)
 
-    # Read csv as pd
-    movies_df = pd.read_csv(movies_csv)
-
-    # Specify the key of the movies (path in S3 of the object)
-    movies_df["Key"] = movies_df["prefix"] + "/"+ movies_df["filename"]
-
-    # Missing info for files in the "buv-zooniverse-uploads"
-    movies_df = movies_df.merge(movies_s3_pd["Key"], 
-                                on=['Key'], how='left', 
-                                indicator=True)
+        # Missing info for files in the "buv-zooniverse-uploads"
+        movies_df = movies_df.merge(movies_s3_pd["Key"], 
+                                    left_on=['fpath'],
+                                    right_on=['Key'], 
+                                    how='left', 
+                                    indicator=True)
 
     # Check that movies can be mapped
     movies_df['exists'] = np.where(movies_df["_merge"]=="left_only", False, True)
@@ -82,10 +57,13 @@ def retrieve_movie_info_from_server(server_i):
     
     # Select only those that can be mapped
     available_movies_df = movies_df[movies_df['exists']]
-
-    print(available_movies_df.shape[0], "movies are mapped from the", server_i)
     
-    return available_movies_df, server_i_dict    
+    # Create a filename with ext column
+    available_movies_df["filename_ext"] = available_movies_df["fpath"].str.split("/").str[-1]
+
+    print(available_movies_df.shape[0], "movies are mapped from the server")
+    
+    return available_movies_df    
 
 # Select the movie you want to upload to Zooniverse
 def movie_to_upload(available_movies_df):
@@ -96,6 +74,8 @@ def movie_to_upload(available_movies_df):
                     description="Movie to upload:",
                     ensure_option=True,
                     disabled=False,
+                    layout=Layout(width='50%'),
+                    style = {'description_width': 'initial'},
                 )
     
     
@@ -103,13 +83,10 @@ def movie_to_upload(available_movies_df):
     return movie_to_upload_widget
 
 
-def check_movie_uploaded(project_name, movie_i):
+def check_movie_uploaded(movie_i, db_info_dict):
 
-    # Get the project-specific name of the database
-    db_path = get_project_info(project_name, "db_path")
-    
     # Create connection to db
-    conn = db_utils.create_connection(db_path)
+    conn = db_utils.create_connection(db_info_dict["db_path"])
 
     # Query info about the clip subjects uploaded to Zooniverse
     subjects_df = pd.read_sql_query("SELECT id, subject_type, filename, clip_start_time, clip_end_time, movie_id FROM subjects WHERE subject_type='clip'", conn)
@@ -121,27 +98,22 @@ def check_movie_uploaded(project_name, movie_i):
     already_uploaded = any(mv in movie_i for mv in videos_uploaded)
 
     if already_uploaded:
-        movie_no_ext = movie_i.split(".", 1)[0]
-        clips_uploaded = subjects_df[subjects_df["filename"].str.contains(movie_no_ext)]
+        clips_uploaded = subjects_df[subjects_df["filename"].str.contains(movie_i)]
         print(movie_i, "has clips already uploaded. The clips start and finish at:")
         print(clips_uploaded[["clip_start_time", "clip_end_time"]], sep = "\n")
     else:
         print(movie_i, "has not been uploaded to Zooniverse yet")
         
         
-def select_clip_n_len(movie_i):
+def select_clip_n_len(movie_i, db_info_dict):
     
-    # Get the location of the csv files with initial info to populate the db
-    sites_csv, movies_csv, species_csv = server_utils.get_sites_movies_species()
+    # Create connection to db
+    conn = db_utils.create_connection(db_info_dict["db_path"])
 
-    # Read csv as pd
-    movies_df = pd.read_csv(movies_csv)
+    # Query info about the movie of interest
+    movie_df = pd.read_sql_query(
+        f"SELECT filename, duration, survey_start, survey_end FROM movies WHERE filename='{movie_i}'", conn)
     
-    # Get the end_survey value of movie_i
-    end_survey_i = int(movies_df[movies_df["filename"]==movie_i].survey_end.unique()[0])
-    start_survey_i = int(movies_df[movies_df["filename"]==movie_i].survey_start.unique()[0])
-    duration_i = int(movies_df[movies_df["filename"]==movie_i].duration.unique()[0])
-
     # Display in hours, minutes and seconds
     def to_clips(clip_length, clips_range):
 
@@ -161,9 +133,10 @@ def select_clip_n_len(movie_i):
                                  description="Length of clips:",
                                  ensure_option=True,
                                  disabled=False,),
-                             clips_range = widgets.IntRangeSlider(value=[start_survey_i,end_survey_i],
+                             clips_range = widgets.IntRangeSlider(value=[movie_df.survey_start.values,
+                                                                         movie_df.survey_end.values],
                                                                   min=0,
-                                                                  max=duration_i,
+                                                                  max=movie_df.duration.values,
                                                                   step=1,
                                                                   description='Range in seconds:',
                                                                  ))
@@ -203,7 +176,7 @@ def extract_clips(df, clip_length):
             subprocess.call(["ffmpeg", 
                              "-ss", str(row['upl_seconds']), 
                              "-t", str(clip_length), 
-                             "-i", str(row['filename']), 
+                             "-i", str(row['filename_ext']), 
                              "-c", "copy", 
                              "-an",#removes the audio
                              "-force_key_frames", "1",
@@ -212,13 +185,7 @@ def extract_clips(df, clip_length):
     print("clips extracted successfully")
     
     
-def create_clips(available_movies_df, movie_i, clip_selection, server, project_name):
-        
-        # Select movie of interest
-        movie_i_df = available_movies_df[available_movies_df['filename']==movie_i].reset_index(drop=True)
-        
-        # Save the filename of the movie_i
-        movie_i_df_filename = movie_i_df.filename.unique()[0]
+def create_clips(available_movies_df, movie_i, db_info_dict, clip_selection, project_name):
         
         # Calculate the max number of clips available
         clip_length = clip_selection.kwargs['clip_length']
@@ -226,6 +193,9 @@ def create_clips(available_movies_df, movie_i, clip_selection, server, project_n
         start_trim = clip_selection.kwargs['clips_range'][0]
         end_trim = clip_selection.kwargs['clips_range'][1]
 
+        # Filter the df for the movie of interest
+        movie_i_df = available_movies_df[available_movies_df['filename']==movie_i].reset_index(drop=True)
+        
         # Calculate all the seconds for the new clips to start
         movie_i_df["seconds"] = [
             list(range(start_trim, int(math.floor(end_trim / clip_length) * clip_length), clip_length))
@@ -240,30 +210,27 @@ def create_clips(available_movies_df, movie_i, clip_selection, server, project_n
         if not clip_numbers==potential_start_df.shape[0]:
             print("There was an issue estimating the starting seconds for the", clip_numbers, "clips")
             
-        if not server == "local":
-            # Download the movie locally
-            if project_name == "Spyfish_Aotearoa":
-                
-                bucket_i = "marine-buv"
-                
-                if not os.path.exists(movie_i_df_filename):
-                    # Download the movie of interest
-                    server_utils.download_object_from_s3(
-                                    server_i_dict["client"],
-                                    bucket=bucket_i,
-                                    key=movie_i_df.Key.unique()[0],
-                                    filename=movie_i_df_filename,
-                    )        
-        
-        # Specify the temp folder to host the clips
-        clips_folder = movie_i_df_filename.split('.')[0]+"_clips_folder"
+        # Download the movie locally from the server
+        if project_name == "Spyfish_Aotearoa":
 
+            bucket_i = "marine-buv"
+
+            if not os.path.exists(movie_i_df.filename_ext[0]):
+                # Download the movie of interest
+                server_utils.download_object_from_s3(
+                                db_info_dict["client"],
+                                bucket=bucket_i,
+                                key=movie_i_df.Key.unique()[0],
+                                filename=movie_i_df.filename_ext[0],
+                )        
+
+        # Specify the temp folder to host the clips
+        clips_folder = movie_i+"_clips"
 
         # Set the filename of the clips
-        potential_start_df["clip_filename"] = movie_i_df_filename.split('.')[0] + "_clip_" + potential_start_df["upl_seconds"].astype(str) + "_" + str(clip_length) + ".mp4"
+        potential_start_df["clip_filename"] = movie_i + "_clip_" + potential_start_df["upl_seconds"].astype(str) + "_" + str(clip_length) + ".mp4"
 
-
-        # Set the path to uncompressed clips
+        # Set the path of the clips
         potential_start_df["clip_path"] = clips_folder+ "/" + potential_start_df["clip_filename"]
 
         # Create the folder to store the videos if not exist
@@ -309,50 +276,29 @@ def select_modification():
     return select_modification_widget
 
 
-def compare_clips(df):
+def modify_clips(clips_to_upload_df, movie_i, clip_modification, modification_details):
 
-    original_clip_paths = df["clip_path"].unique()
+    # Specify the folder to host the modified clips
+    mod_clips_folder = "modified_" + movie_i +"_clips"
     
-    clip_path_widget = widgets.Combobox(
-                    options=tuple(original_clip_paths),
-                    description="Select original clip:",
-                    ensure_option=True,
-                    disabled=False,
-                )
-    
-    main_out = widgets.Output()
-    display(clip_path_widget, main_out)
-    
-    # Display the original and modified clips
-    def on_change(change):
-        with main_out:
-            a = view_clips(df, change["new"])
-            clear_output()
-            display(a)
-                
-                
-    clip_path_widget.observe(on_change, names='value')
-    
-
-def modify_clips(clips_to_upload_df, clip_modification, modification_details):
-
     # Specify the path of the modified clips
-    clips_to_upload_df["modif_clip_path"] = clip_modification + clips_to_upload_df.clip_path
+    clips_to_upload_df["modif_clip_path"] = mod_clips_folder + "\modified" + clips_to_upload_df.clip_filename
+    
+    # Remove existing modified clips
+    if os.path.exists(mod_clips_folder):
+        shutil.rmtree(mod_clips_folder)
 
     if not clip_modification=="None":
         
         # Save the modification details to include as subject metadata
         clips_to_upload_df["clip_modification_details"] = str(modification_details)
         
-        # Specify the folder of to host the modified clips
-        mod_clips_folder = clip_modification+clips_to_upload_df.filename.unique()[0].split('.')[0]+"_clips_folder"
-
         # Create the folder to store the videos if not exist
         if not os.path.exists(mod_clips_folder):
             os.mkdir(mod_clips_folder)
 
         #### Modify the clips###
-        # Read each movie and extract the clips (printing a progress bar) 
+        # Read each clip and modify them (printing a progress bar) 
         for index, row in tqdm(clips_to_upload_df.iterrows(), total=clips_to_upload_df.shape[0]): 
             if not os.path.exists(row['modif_clip_path']):
                 if "-vf" in modification_details:
@@ -388,6 +334,40 @@ def modify_clips(clips_to_upload_df, clip_modification, modification_details):
         return clips_to_upload_df
     
     
+def compare_clips(df):
+
+    # Save the paths of the clips
+    original_clip_paths = df["clip_path"].unique()
+    
+    # Add "no movie" option to prevent conflicts
+    original_clip_paths = np.append(original_clip_paths,"0 No movie")
+    
+    clip_path_widget = widgets.Combobox(
+                    options=tuple(np.sort(original_clip_paths)),
+                    description="Select original clip:",
+                    ensure_option=True,
+                    disabled=False,
+                    layout=Layout(width='50%'),
+                    style = {'description_width': 'initial'}
+                )
+    
+    main_out = widgets.Output()
+    display(clip_path_widget, main_out)
+    
+    # Display the original and modified clips
+    def on_change(change):
+        with main_out:
+            clear_output()
+            if change["new"]=="0 No movie":
+                print("It is OK to modify the clips again")
+            else:
+                a = view_clips(df, change["new"])
+                display(a)
+                
+                
+    clip_path_widget.observe(on_change, names='value')
+    
+    
 # Display the clips using html
 def view_clips(df, movie_path):
     
@@ -413,69 +393,84 @@ def view_clips(df, movie_path):
     return HTML(html_code)
 
 
-def set_zoo_metadata(df, project_name):
+def set_zoo_metadata(df, project_name, db_info_dict):
     
+    # Get the site information
+    sitename = df.siteName.unique()[0]
+
+    # Create connection to db
+    conn = db_utils.create_connection(db_info_dict["db_path"])
+
+    # Query info about the movie of interest
+    sitesdf = pd.read_sql_query(
+        f"SELECT * FROM sites", conn)
+        
+    # Combine site info to the df
+    upload_to_zoo = df.merge(sitesdf, on="siteName")
+        
+    # Rename columns to match schema names
+    # (fields that begin with “#” or “//” will never be shown to volunteers)
+    # (fields that begin with "!" will only be available for volunteers on the Talk section, after classification)
+    upload_to_zoo = upload_to_zoo.rename(columns={
+            "created_on": "#created_on",
+            "clip_length": "#clip_length",
+            "filename": "#VideoFilename",
+            "clip_modification_details": "#clip_modification_details",
+            "siteName": "#siteName"
+            })
+    
+    # Convert datetime to string to avoid JSON seriazible issues
+    upload_to_zoo['#created_on'] = upload_to_zoo['#created_on'].astype(str)
+        
+    # Select only relevant columns
+    upload_to_zoo = upload_to_zoo[
+        [
+            "modif_clip_path",
+            "upl_seconds",
+            "#clip_length",
+            "#created_on"
+            "#VideoFilename",
+            "#siteName",
+            "#clip_modification_details"
+        ]
+    ]
+
+    # Add information about the type of subject
+    upload_to_zoo["Subject_type"] = "clip"
+        
+    # Add spyfish-specific info
     if project_name == "Spyfish_Aotearoa":
         
-        # Get the site information
-        sitename = df.siteName.unique()[0]
-        
-        # Get the date information
-        created_on = df.created_on.unique()[0]
-        
-        # Get the location of the csv files with initial info to populate the db
-        sites_csv, movies_csv, species_csv = server_utils.get_sites_movies_species()
+        # Read sites csv as pd
+        sitesdf = pd.read_csv(db_info_dict["sites_csv"])
 
-        # Read csv as pd
-        sitesdf = pd.read_csv(sites_csv)
-
-        # Include site info to the df
-        upload_to_zoo = df.merge(sitesdf, on="siteName")
-        
-        
         # Rename columns to match schema names
-        # (fields that begin with “#” or “//” will never be shown to volunteers)
-        # (fields that begin with "!" will only be available for volunteers on the Talk section, after classification)
-
-        upload_to_zoo = upload_to_zoo.rename(columns={
+        sitesdf = sitesdf.rename(columns={
             "Marine Reserve": "!LinkToMarineReserve",
-            "created_on": "#EventDate",
-            "filename": "#VideoFilename",
             "Waypoint": "#SiteID",
             "Protection Status": "ProtectionStatus",
             "Depth (m)": "Depth",
-            "clip_length": "#clip_length",
-            "clip_modification_details": "#clip_modification_details"
             })
-        
-        
-        # Convert datetime to string to avoid JSON seriazible issues
-        upload_to_zoo['#EventDate'] = upload_to_zoo['#EventDate'].astype(str)
-
-        
+                                           
         # Select only relevant columns
-        upload_to_zoo = upload_to_zoo[
+        sitesdf = sitesdf[
             [
-                "modif_clip_path",
-                "upl_seconds",
-                "#clip_length",
-                "Depth",
-                "ProtectionStatus",
+                "siteName",
                 "!LinkToMarineReserve",
-                "#EventDate",
-                "#VideoFilename",
                 "#SiteID",
-                "#clip_modification_details"
+                "ProtectionStatus",
+                "Depth"
             ]
         ]
-
-        # Add information about the type of subject
-        upload_to_zoo["Subject_type"] = "clip"
         
-        # Prevent NANs on any column
-        if upload_to_zoo.isnull().values.any():
-            print("The following columns have NAN values", 
-                  upload_to_zoo.columns[upload_to_zoo.isna().any()].tolist())
+        # Include site info to the df
+        upload_to_zoo = upload_to_zoo.merge(sitesdf, left_on="#siteName",
+                                            right_on="siteName")
+        
+    # Prevent NANs on any column
+    if upload_to_zoo.isnull().values.any():
+        print("The following columns have NAN values", 
+              upload_to_zoo.columns[upload_to_zoo.isna().any()].tolist())
         
     return upload_to_zoo, sitename, created_on
 

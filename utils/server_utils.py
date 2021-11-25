@@ -8,15 +8,19 @@ import gdown
 import zipfile
 import boto3
 
+import utils.tutorials_utils as tutorials_utils
 from tqdm import tqdm
 from pathlib import Path
 
 # Common utility functions to connect to external servers (AWS, GDrive,...)
 
-def connect_to_server(server):
+def connect_to_server(project_name):
+    
+    # Get project-specific server info
+    server = tutorials_utils.get_project_info(project_name, "server")
     
     # Create an empty dictionary to host the server connections
-    server_df = {}
+    server_dict = {}
     
     if server=="AWS":
         # Set aws account credentials
@@ -25,10 +29,9 @@ def connect_to_server(server):
         # Connect to S3
         client = connect_s3(aws_access_key_id, aws_secret_access_key)
         
-        server_df["client"] = client
+        server_dict["client"] = client
         
-        
-    return server_df
+    return server_dict
 
 
 def download_csv_from_google_drive(file_url):
@@ -66,42 +69,40 @@ def download_init_csv(gdrive_id, db_csv_info):
     os.remove(zip_file)
     
     
-def get_db_init_info(project_name):
+def get_db_init_info(project_name, server_dict):
     
     # Define the path to the csv files with initial info to build the db
     db_csv_info = "../db_starter/db_csv_info/"
         
-    if project_name == "Spyfish_Aotearoa":
+    # Get project-specific server info
+    server = tutorials_utils.get_project_info(project_name, "server")
+    
+    if server == "AWS":
         
-        # Start AWS session
-        aws_access_key_id, aws_secret_access_key = aws_credentials()
-        client = connect_s3(aws_access_key_id, aws_secret_access_key)
-        
-        # Download csv files from AWS
+        # Names of csv files from AWS to download
         sites_csv = "sites_buv_doc.csv"
         movies_csv = "movies_buv_doc.csv"
         species_csv = "species_buv_doc.csv"
         
-        # Create the folder to store the concatenated videos if not exist
+        # Create the folder to store the csv files if not exist
         if not os.path.exists(db_csv_info):
             os.mkdir(db_csv_info)
             
-        download_object_from_s3(client,
+        download_object_from_s3(server_dict["client"],
                                 bucket='marine-buv',
                                 key="init_db_doc_buv/"+sites_csv, 
                                 filename=db_csv_info+sites_csv)
-        download_object_from_s3(client,
+        download_object_from_s3(server_dict["client"],
                                 bucket='marine-buv',
                                 key="init_db_doc_buv/"+movies_csv, 
                                 filename=db_csv_info+movies_csv)
-        download_object_from_s3(client,
+        download_object_from_s3(server_dict["client"],
                                 bucket='marine-buv',
                                 key="init_db_doc_buv/"+species_csv, 
                                 filename=db_csv_info+species_csv)
         
         
         db_initial_info = {
-            "client": client, 
             "sites_csv": db_csv_info+sites_csv, 
             "movies_csv": db_csv_info+movies_csv, 
             "species_csv": db_csv_info+species_csv

@@ -131,6 +131,9 @@ def choose_agg_parameters(subject_type: str):
 
 def choose_w_version(workflows_df, workflow_id):
 
+    # Selects the workflow id based on the workflow name
+    workflow_id = workflows_df[workflows_df.display_name==workflow_id].workflow_id.unique()[0]
+
     layout = widgets.Layout(width="auto", height="40px")  # set width and height
 
     # Estimate the versions of the workflow available
@@ -149,14 +152,13 @@ def choose_w_version(workflows_df, workflow_id):
     )
 
     display(w_version)
-    return w_version
+    return w_version, workflow_id
 
 
 def get_classifications(
-    workflow_id: int, workflow_version: float, subj_type, class_df, project_name
+    workflow_id: int, workflow_version: float, subj_type, class_df, project_name,db_info_dict
 ):
-    # Get the project-specific name of the database
-    db_path = tutorials_utils.get_project_info(project_name, "db_path")
+    
     
     # Filter classifications of interest
     class_df = class_df[
@@ -164,10 +166,9 @@ def get_classifications(
         & (class_df.workflow_version >= workflow_version)
     ].reset_index(drop=True)
     
-    
     # Add information about the subject
     # Create connection to db
-    conn = db_utils.create_connection(db_path)
+    conn = db_utils.create_connection(db_info_dict["db_path"])
     
     if subj_type == "frame":
         # Query id and subject type from the subjects table
@@ -180,7 +181,6 @@ def get_classifications(
     # Ensure id format matches classification's subject_id
     class_df["subject_ids"] = class_df["subject_ids"].astype('Int64')
     subjects_df["id"] = subjects_df["id"].astype('Int64')
-    
     
     # Add subject information based on subject_ids
     class_df = pd.merge(

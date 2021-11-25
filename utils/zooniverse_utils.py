@@ -45,25 +45,16 @@ def auth_session(username, password, project_n):
 
 
 # Function to retrieve information from Zooniverse
-def retrieve_zoo_info(username: str, password: str, project_name: str, zoo_info: str):
-
-    # Get the number of the Zooniverse project
-    project_n = tutorials_utils.get_project_info(project_name, "Zooniverse_number")
-    print("Connecting to the Zooniverse project")
-
-    # Connect to the Zooniverse project
-    project = auth_session(username, password, project_n)
+def retrieve_zoo_info(project_name, zoo_project, zoo_info: str):
 
     # Create an empty dictionary to host the dfs of interest
-    info_df = {
-        "project": project
-    }
+    info_df = {}
 
     for info_n in zoo_info:
         print("Retrieving", info_n, "from Zooniverse")
 
         # Get the information of interest from Zooniverse
-        export = project.get_export(info_n)
+        export = zoo_project.get_export(info_n)
 
         try:
             # Save the info as pandas data frame
@@ -115,10 +106,7 @@ def extract_metadata(subj_df):
     return subj_df, meta_df
 
 
-def populate_subjects(subjects, project_name):
-
-    # Get the project-specific name of the database
-    db_path = tutorials_utils.get_project_info(project_name, "db_path")
+def populate_subjects(subjects, project_name, db_path):
     
     # Check if the Zooniverse project is the KSO
     if project_name == "Koster_Seafloor_Obs":
