@@ -264,6 +264,11 @@ def get_matching_s3_keys(client, bucket, prefix="", suffix=""):
     return contents_s3_pd
 
 def get_koster_movies(client):
+    """ 
+    Get list of movies from SNIC server using ssh client.
+    
+    :param client: SSH client (paramiko)
+    """
     stdin, stdout, stderr = client.exec_command("ls /cephyr/NOBACKUP/groups/snic2021-6-9/koster_movies/")
     snic_df = pd.DataFrame(stdout.read().decode("utf-8").split('\n'), columns=['spath'])
     return snic_df
