@@ -7,6 +7,9 @@ import getpass
 import gdown
 import zipfile
 import boto3
+import paramiko
+from paramiko import SSHClient
+from scp import SCPClient
 
 import utils.tutorials_utils as tutorials_utils
 from tqdm import tqdm
@@ -29,7 +32,14 @@ def connect_to_server(project_name):
         # Connect to S3
         client = connect_s3(aws_access_key_id, aws_secret_access_key)
         
-        server_dict["client"] = client
+    if server=="SNIC":
+        # Set SNIC credentials
+        snic_user, snic_pass = snic_credentials()
+        
+        # Connect to SNIC
+        client = connect_snic(snic_user, snic_pass)
+        
+    server_dict["client"] = client
         
     return server_dict
 
@@ -159,8 +169,26 @@ def update_db_init_info(project_name, csv_to_update):
                               filename=str(csv_to_update))
             
             
+def snic_credentials():
+    # Save your access key for the SNIC server. 
+    snic_user = getpass.getpass('Enter your username for SNIC server')
+    snic_pass = getpass.getpass('Enter your password for SNIC server')
+    
+    return snic_user, snic_pass
 
 
+def connect_snic(snic_user: str, snic_pass: str):
+    # Connect to the SNIC server and return SSH client
+    client = SSHClient()
+    client.set_missing_host_key_policy(paramiko.AutoAddPolicy()) 
+    client.load_system_host_keys()
+    client.connect(hostname="129.16.125.130", 
+                port = 22,
+                username=snic_user,
+                password=snic_pass)
+    return client
+
+            
 def aws_credentials():
     # Save your access key for the s3 bucket. 
     aws_access_key_id = getpass.getpass('Enter the key id for the aws server')
@@ -175,8 +203,7 @@ def connect_s3(aws_access_key_id, aws_secret_access_key):
                           aws_access_key_id = aws_access_key_id, 
                           aws_secret_access_key = aws_secret_access_key)
     return client
-
-
+    
 
 def get_matching_s3_objects(client, bucket, prefix="", suffix=""):
     """
@@ -235,6 +262,11 @@ def get_matching_s3_keys(client, bucket, prefix="", suffix=""):
     contents_s3_pd = pd.DataFrame(s3_keys, columns = ["Key"])
     
     return contents_s3_pd
+
+def get_koster_movies(client):
+    stdin, stdout, stderr = client.exec_command("ls /cephyr/NOBACKUP/groups/snic2021-6-9/koster_movies/")
+    snic_df = pd.DataFrame(stdout.read().decode("utf-8").split('\n'), columns=['spath'])
+    return snic_df
 
 
 # def retrieve_s3_buckets_info(client, bucket, suffix):

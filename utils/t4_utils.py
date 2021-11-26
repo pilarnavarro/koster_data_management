@@ -17,14 +17,14 @@ import utils.zooniverse_utils as zooniverse_utils
 import utils.movie_utils as movie_utils
 import utils.server_utils as server_utils
 import utils.tutorials_utils as tutorials_utils
+import utils.koster_utils as koster_utils
 from panoptes_client import (
     SubjectSet,
     Subject,
     Project,
     Panoptes,
 )
-
-
+   
 def retrieve_movie_info_from_server(project_name, db_info_dict):
     
     if project_name == "Spyfish_Aotearoa":
@@ -32,27 +32,35 @@ def retrieve_movie_info_from_server(project_name, db_info_dict):
         bucket_i = 'marine-buv'
 
         # Retrieve info from the bucket
-        movies_s3_pd = server_utils.get_matching_s3_keys(client = db_info_dict["client"], 
+        server_df = server_utils.get_matching_s3_keys(client = db_info_dict["client"], 
                                                          bucket = bucket_i, 
                                                          suffix = movie_utils.get_movie_extensions())
+        server_df.rename({"Key": "spath"})
     
-        # Create connection to db
-        conn = db_utils.create_connection(db_info_dict["db_path"])
+    if project_name == "Koster_Seafloor_Obs":
+        server_df = server_utils.get_koster_movies(client = db_info_dict["client"])
+        server_df["spath"] = server_df["spath"].apply(koster_utils.unswedify)
+    else:
+        raise ValueError("The project you selected is not currently supported.")
+    
+    
+    # Create connection to db
+    conn = db_utils.create_connection(db_info_dict["db_path"])
 
-        # Query info about the movie of interest
-        movies_df = pd.read_sql_query(f"SELECT * FROM movies", conn)
+    # Query info about the movie of interest
+    movies_df = pd.read_sql_query(f"SELECT * FROM movies", conn)
 
-        # Missing info for files in the "buv-zooniverse-uploads"
-        movies_df = movies_df.merge(movies_s3_pd["Key"], 
-                                    left_on=['fpath'],
-                                    right_on=['Key'], 
-                                    how='left', 
-                                    indicator=True)
+    # Missing info for files in the "buv-zooniverse-uploads"
+    movies_df = movies_df.merge(server_df["spath"], 
+                                left_on=['fpath'],
+                                right_on=['spath'], 
+                                how='left', 
+                                indicator=True)
 
     # Check that movies can be mapped
     movies_df['exists'] = np.where(movies_df["_merge"]=="left_only", False, True)
 
-    # Drop _merge columns to match sql squema
+    # Drop _merge columns to match sql schema
     movies_df = movies_df.drop("_merge", axis=1)
     
     # Select only those that can be mapped
@@ -63,7 +71,7 @@ def retrieve_movie_info_from_server(project_name, db_info_dict):
 
     print(available_movies_df.shape[0], "movies are mapped from the server")
     
-    return available_movies_df    
+    return available_movies_df
 
 # Select the movie you want to upload to Zooniverse
 def movie_to_upload(available_movies_df):

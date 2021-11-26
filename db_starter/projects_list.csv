@@ -1,4 +1,4 @@
 Project_name,Zooniverse_number,db_path,server
-Koster_Seafloor_Obs,9747,koster_lab.db,local
+Koster_Seafloor_Obs,9747,koster_lab.db,SNIC
 Spyfish_Aotearoa,14054,spyfish_aot.db,AWS
 SGU,NAN,sgu.db,local
