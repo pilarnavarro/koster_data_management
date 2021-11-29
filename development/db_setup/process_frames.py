@@ -7,8 +7,8 @@ from datetime import datetime
 from panoptes_client import Project, Panoptes
 from collections import OrderedDict, Counter
 from sklearn.cluster import DBSCAN
-import utils.db_utils as db_utils
-from utils.zooniverse_utils import auth_session
+import kso_utils.db_utils as db_utils
+from kso_utils.zooniverse_utils import auth_session
 
 def bb_iou(boxA, boxB):
 

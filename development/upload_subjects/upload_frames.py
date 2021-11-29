@@ -7,14 +7,14 @@ import pims
 
 from PIL import Image
 from datetime import date
-from utils.zooniverse_utils import auth_session
+from kso_utils.zooniverse_utils import auth_session
 from panoptes_client import (
     SubjectSet,
     Subject,
     Project,
     Panoptes,
 )
-import utils.koster_utils as koster_utils
+import kso_utils.koster_utils as koster_utils
 
 # Function to identify up to n number of frames per classified clip
 # that contains species of interest after the first time seen
