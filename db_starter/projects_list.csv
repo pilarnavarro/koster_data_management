@@ -1,4 +1,4 @@
-Project_name,Zooniverse_number,db_path,server,bucket,key,sites_csv,movies_csv,species_csv,remote_fpath,local_fpath
-Koster_Seafloor_Obs,9747,koster_lab.db,SNIC,None,None,None,None,None,/cephyr/NOBACKUP/groups/snic2021-6-9/koster_movies/,.
-Spyfish_Aotearoa,14054,spyfish_aot.db,AWS,marine_buv,init_db_doc_buv,sites_buv_doc.csv,movies_buv_doc.csv,species_buv_doc.csv,None,None
-SGU,NAN,sgu.db,local,None,None,None,None,None,None,None
+Project_name,Zooniverse_number,db_path,server,bucket,key,csv_folder,movie_folder
+Koster_Seafloor_Obs,9747,koster_lab.db,SNIC,None,None,None,/cephyr/NOBACKUP/groups/snic2021-6-9/koster_movies/
+Spyfish_Aotearoa,14054,spyfish_aot.db,AWS,marine_buv,init_db_doc_buv,None,None
+SGU,NAN,sgu.db,local,None,None,None,None
