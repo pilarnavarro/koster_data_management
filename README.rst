@@ -76,6 +76,11 @@ Download Anaconda
 
 `Click here to download <https://docs.anaconda.com/anaconda/install/index.html>`_. Anaconda allows you to create virtual Python environments for and features a simple package manager to keep track of dependencies. 
 
+Install required packages
+~~~~
+
+Navigate to the cloned repository and install the required packages outlined in the requirements.txt. You can use pip install -r requirements.txt. 
+
 Create the initial information for the database 
 ~~~~
 
