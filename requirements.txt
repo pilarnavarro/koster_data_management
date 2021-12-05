@@ -1,12 +1,12 @@
 mydia==2.2.1
-requests==2.21.0
-numpy==1.19.2
+requests==2.26.0
+numpy==1.21.4
 pandas==1.3.0
 panoptes_client
 python_magic==0.4.18
-opencv_python==4.1.2.30
+opencv_python==4.5.4.60
 Pillow==8.3.2
-scikit_learn==0.23.0
+scikit_learn==1.0.1
 -e git+https://github.com/soft-matter/pims.git#egg=PIMS
 av==8.0.1
 jupyter
@@ -16,4 +16,4 @@ qgrid
 gdown
 itables
 boto3
-ipyfilechooser
+scp==0.14.1
