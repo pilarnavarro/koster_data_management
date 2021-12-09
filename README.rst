@@ -97,8 +97,18 @@ If you use this code or its models in your research, please cite:
 Anton V, Germishuys J, Bergström P, Lindegarth M, Obst M (2021) An open-source, citizen science and machine learning approach to analyse subsea movies. Biodiversity Data Journal 9: e60548. https://doi.org/10.3897/BDJ.9.e60548
 
 Collaborations/questions
-~~~~~~~~~~~~
+------------------------
 
 We are working to make our work to other marine scientists. Please feel free to `contact us`_ with your questions.
 
 .. _contact us: matthias.obst@marine.gu.se
+
+
+Troubleshooting
+---------------
+
+If you experience issues to upload movies to zooniverse. It might be related to the libmagic package. In windows the following commands seem to work.
+
+``pip install python-libmagic``
+
+``pip install python-magic-bin``
