@@ -47,7 +47,7 @@ Requirements
 Installation Instructions
 -------------------------
 
-Clone this repository
+Option 1: Local / Cloud Installation
 ~~~~
 
 For those with a Github account or git installed simply clone this
@@ -87,6 +87,27 @@ Link your movies to the database
 
 You will need underwater movies to run KSO. You can `download some samples <https://drive.google.com/drive/folders/1t2ce8euh3SEU2I8uhiZN1Tu-76ZDqB6w?usp=sharing/>`_. Remember where you store the movies as you will need to specify the directory of the movies in the tutorials.
 
+
+Option 2: SNIC Users
+~~~~
+
+To use the Jupyter Notebooks within the Alvis HPC cluster, please visit [https://portal.c3se.chalmers.se](https://portal.c3se.chalmers.se) and login using your SNIC credentials. 
+
+Once you have been authorized, click on "Interactive Apps" and then "Jupyter". This open the server creation options. 
+
+Here you can keep the settings as default, apart from the "Number of hours" which you can set to the desired limit. Then choose either **Data Management (Runtime (User specified jupyter1.sh))** or **Machine Learning (Runtime (User specified jupyter2.sh))** from the Runtime dropdown options.
+
+.. image:: images/screenshot_loading.png
+   :align: center
+   :alt: "(Session loading window")
+
+This will directly start a server using the correct container image, first showing a blue window and you should see a green window and the button **"Connect to Jupyter"** appears on the screen. Click this to launch into the Jupyter notebook environment. 
+
+.. image:: images/screenshot_started.png
+   :align: center
+   :alt: "(Session started window")
+
+Important note: The remaining time for the server is shown in green window as well. If you have finished using the notebook server before the alloted time runs out, please select **"Delete"** so that the resources can be released for use by others within the project. 
 
 
 Citation
