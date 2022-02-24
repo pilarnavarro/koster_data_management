@@ -91,7 +91,7 @@ You will need underwater movies to run KSO. You can `download some samples <http
 Option 2: SNIC Users
 ~~~~
 
-To use the Jupyter Notebooks within the Alvis HPC cluster, please visit [https://portal.c3se.chalmers.se](https://portal.c3se.chalmers.se) and login using your SNIC credentials. 
+To use the Jupyter Notebooks within the Alvis HPC cluster, please visit `<https://portal.c3se.chalmers.se>`_ and login using your SNIC credentials. 
 
 Once you have been authorized, click on "Interactive Apps" and then "Jupyter". This open the server creation options. 
 
@@ -99,12 +99,14 @@ Here you can keep the settings as default, apart from the "Number of hours" whic
 
 .. image:: images/screenshot_loading.png
    :align: center
-   :alt: "(Session loading window")
+   :width: 600
+   :alt: "(Session queued window")
 
-This will directly start a server using the correct container image, first showing a blue window and you should see a green window and the button **"Connect to Jupyter"** appears on the screen. Click this to launch into the Jupyter notebook environment. 
+This will directly queue a server session using the correct container image, first showing a blue window and then you should see a green window when the session has been successfully started and the button **"Connect to Jupyter"** appears on the screen. Click this to launch into the Jupyter notebook environment. 
 
 .. image:: images/screenshot_started.png
    :align: center
+   :width: 600
    :alt: "(Session started window")
 
 Important note: The remaining time for the server is shown in green window as well. If you have finished using the notebook server before the alloted time runs out, please select **"Delete"** so that the resources can be released for use by others within the project. 
