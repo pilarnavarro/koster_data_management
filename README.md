@@ -18,25 +18,10 @@ The Koster Seafloor Observatory is an open-source, citizen science and machine l
 
 ![high-level][high-level-overview]
 
-
-<!-- TOC -->
-##### Table of Contents  
-[Overview](#OVERVIEW)  
-[Tutorials](#TUTORIALS) 
-[Database](#DATABASE)
-[Quickstart](#QUICKSTART)
-[Requirements](#REQUIREMENTS)
-[Installation](#INSTALLATION)
-   
-
-
-<a name="OVERVIEW"/>
 ## Overview
 This repository contains scripts related to the data management component of the Koster Seafloor Observatory. The system is built around a series of easy-to-use Jupyter notebook tutorials. Each tutorial allows users to perform a specific task of the system (e.g. upload footage to the citizen science platform or analyse the classiffied data).
 
-
-<a name="TUTORIALS"/>
-## Tutorials
+### Tutorials
 | Name                                              | Description                                                                                 | Status             |
 | ------------------------------------------------- | ------------------------------------------------------------------------------------------- | :-----------------:|
 | 1. Upload new footage                             | Upload new underwater media to the cloud/server and update the csv files                    | Coming soon        |
@@ -50,26 +35,26 @@ This repository contains scripts related to the data management component of the
 | 9. Download and format Zooniverse classifications | pull up-to-date classifications from Zooniverse and format them for further analysis        | Coming soon        |
 | 10. Publish classifications                       | Publish classifications to  [OBIS][OBIS-site]                                               | Completed          |
   
-  
-<a name="DATABASE"/>
-## Database
-The system uses a series of csv files to create a SQLite database to link all information related to the underwater footage and the classifications. The database follows the `Darwin Core (DwC) <https://dwc.tdwg.org/simple/>`_  standards to maximise the sharing, use and reuse of open-access biodiversity data.
+### Database
+The system uses a series of csv files to create a SQLite database to link all information related to the underwater footage and the classifications. The database follows the [Darwin Core standards (DwC)](https://dwc.tdwg.org/simple/) to maximise the sharing, use and reuse of open-access biodiversity data.
 The database has seven interconnected tables. The “movies”, “sites” and “species” tables have project-specific information from the underwater movie metadata, as well as the species choices available for citizen scientists to annotate the clips, retrieved from Zooniverse. The “agg_annotations_frame” and “agg_annotations_clip” tables contain information related to the annotations provided by citizen scientists. The “subjects” table has information related to the clips and frames uploaded to the Koster Seafloor Observatory. The "model_annotations" table holds information related to the annotations provided by the machine learning algorithms. 
 
 ![Database_diag][Database_diagram]
 
 
-<a name="QUICKSTART"/>
 ## Quickstart
+Check out our Binder project to try the system in your browser without installing anything. 
+
 [![binder][binderlogo]][binderlink]
 
-<a name="REQUIREMENTS"/>
-## Requirements
-* Python 3.7+
-* Python dependencies listed in requirements.txt
 
-<a name="INSTALLATION"/>
 ## Installation
+I you want to fully use our system (Binder has computing limitations) you will need to download this repository in you local computer or server.
+
+### Requirements
+* [Python 3.7+](https://www.python.org/)
+* [Anaconda](https://docs.anaconda.com/anaconda/install/index.html)
+
 ### Option 1: Local / Cloud Installation
 #### Download this repository
 For those with a [Github](https://github.com/) account or git installed simply clone this
@@ -79,9 +64,6 @@ git clone https://github.com/ocean-data-factory-sweden/koster_data_management.gi
 ```
 
 If you don't have a Github account you can manually download the repository. Click on the green "Code" download button visible on the top right of this screen and choose the Download ZIP option from the Code pull-down menu. 
-
-#### Download Anaconda
-[Anaconda](https://docs.anaconda.com/anaconda/install/index.html) allows you to create virtual Python environments for and features a simple package manager to keep track of dependencies.
 
 #### Install dependecies
 Navigate to the folder where you have cloned the repository or unzipped the manually downloaded repository and run
@@ -94,7 +76,7 @@ If you will work in a new project you will need to input the information about t
 
 
 #### Link your footage to the database 
-You will need underwater movies to run KSO. You can `download some samples <https://drive.google.com/drive/folders/1t2ce8euh3SEU2I8uhiZN1Tu-76ZDqB6w?usp=sharing/>`_. Remember where you store the movies as you will need to specify the directory of the movies in the tutorials.
+You will need files of underwater footage to run this system. You can [download some samples](https://drive.google.com/drive/folders/1t2ce8euh3SEU2I8uhiZN1Tu-76ZDqB6w?usp=sharing) and move them to `db_starter`. You can also store your own files and specify their directory in the tutorials.
 
 
 ### Option 2: SNIC Users
@@ -104,15 +86,12 @@ Once you have been authorized, click on "Interactive Apps" and then "Jupyter". T
 
 Here you can keep the settings as default, apart from the "Number of hours" which you can set to the desired limit. Then choose either **Data Management (Runtime (User specified jupyter1.sh))** or **Machine Learning (Runtime (User specified jupyter2.sh))** from the Runtime dropdown options.
 
-.. image:: images/screenshot_loading.png
-   :align: center
-   :alt: "(Session queued window")
+![screenshot_load][screenshot_loading]
 
 This will directly queue a server session using the correct container image, first showing a blue window and then you should see a green window when the session has been successfully started and the button **"Connect to Jupyter"** appears on the screen. Click this to launch into the Jupyter notebook environment. 
 
-.. image:: images/screenshot_started.png
-   :align: center
-   :alt: "(Session started window")
+
+![screenshot_start][screenshot_started]
 
 Important note: The remaining time for the server is shown in green window as well. If you have finished using the notebook server before the alloted time runs out, please select **"Delete"** so that the resources can be released for use by others within the project. 
 
@@ -152,6 +131,8 @@ pip install python-magic-bin
 [high-level-overview]: https://github.com/ocean-data-factory-sweden/koster_data_management/blob/dev/images/high-level-overview.png?raw=true "Overview of the three main modules and the components of the Koster Seafloor Observatory"
 [objdecmodule]: https://github.com/ocean-data-factory-sweden/koster_yolov4
 [OBIS-site]: https://www.gbif.org/network/2b7c7b4f-4d4f-40d3-94de-c28b6fa054a6
-[Database_diagram]: https://github.com/ocean-data-factory-sweden/koster_data_management/tree/dev/images/Database_diagram.png "Entity relationship diagram of the SQLite database of the Koster Seafloor Observatory"
+[Database_diagram]: https://github.com/ocean-data-factory-sweden/koster_data_management/blob/dev/images/Database_diagram.png?raw=true "Entity relationship diagram of the SQLite database of the Koster Seafloor Observatory"
 [binderlogo]: https://mybinder.org/badge_logo.svg
 [binderlink]: https://mybinder.org/v2/gh/ocean-data-factory-sweden/koster_data_management/main
+[screenshot_loading]: https://github.com/ocean-data-factory-sweden/koster_data_management/blob/dev/images/screenshot_loading.png?raw=true
+[screenshot_started]: https://github.com/ocean-data-factory-sweden/koster_data_management/blob/dev/images/screenshot_started.png?raw=true
