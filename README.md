@@ -33,7 +33,7 @@ This repository contains scripts related to the data management component of the
 | 7. Expose ML models                               | Expose model to the API                                                                     | Coming soon        |
 | 8. Analyse Zooniverse classifications             | pull up-to-date classifications from Zooniverse and report summary stats/graphs             | Completed          |
 | 9. Download and format Zooniverse classifications | pull up-to-date classifications from Zooniverse and format them for further analysis        | Coming soon        |
-| 10. Publish classifications                       | Publish classifications to  [OBIS][OBIS-site]                                               | Completed          |
+| 10. Publish classifications                       | Publish classifications to  [OBIS][OBIS-site]                                               | Coming soon        |
   
 ### Database
 The system uses a series of csv files to create a SQLite database to link all information related to the underwater footage and the classifications. The database follows the [Darwin Core standards (DwC)](https://dwc.tdwg.org/simple/) to maximise the sharing, use and reuse of open-access biodiversity data.
