@@ -6,7 +6,7 @@ import math, subprocess
 from pathlib import Path
 
 from datetime import date
-from utils.zooniverse_utils import auth_session
+from kso_utils.zooniverse_utils import auth_session
 from panoptes_client import (
     SubjectSet,
     Subject,

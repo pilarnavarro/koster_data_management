@@ -16,14 +16,26 @@ filename text NOT NULL,
 created_on datetime NULL,
 fps integer NULL,
 duration datetime NULL,
-survey_start integer NULL,
-survey_end integer NULL,
+sampling_start integer NULL,
+sampling_end integer NULL,
 author text NULL,
 site_id integer NULL,
 fpath text NULL,
 UNIQUE (filename),
 FOREIGN KEY (site_id) REFERENCES sites (id)
 ); 
+
+CREATE TABLE IF NOT EXISTS photos
+(
+id integer PRIMARY KEY,
+filename text NOT NULL,
+created_on datetime NULL,
+site_id integer NULL,
+fpath text NULL,
+UNIQUE (filename),
+FOREIGN KEY (site_id) REFERENCES sites (id)
+); 
+
 
 CREATE TABLE IF NOT EXISTS subjects
 (

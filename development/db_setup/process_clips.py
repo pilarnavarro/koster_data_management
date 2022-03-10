@@ -4,8 +4,8 @@ import requests
 import pandas as pd
 import numpy as np
 from datetime import datetime
-import utils.db_utils as db_utils
-from utils.zooniverse_utils import auth_session
+import kso_utils.db_utils as db_utils
+from kso_utils.zooniverse_utils import auth_session
 
 
 def main():
