@@ -118,21 +118,21 @@ pip install python-magic-bin
 
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
-[contributors-shield]: https://img.shields.io/github/contributors/ocean-data-factory-sweden/koster_app.svg?style=for-the-badge
+[contributors-shield]: https://img.shields.io/github/contributors/ocean-data-factory-sweden/koster_data_management.svg?style=for-the-badge
 [contributors-url]: https://https://github.com/ocean-data-factory-sweden/koster_data_management/graphs/contributors
-[forks-shield]: https://img.shields.io/github/forks/ocean-data-factory-sweden/koster_app.svg?style=for-the-badge
+[forks-shield]: https://img.shields.io/github/forks/ocean-data-factory-sweden/koster_data_management.svg?style=for-the-badge
 [forks-url]: https://github.com/ocean-data-factory-sweden/koster_data_management/network/members
-[stars-shield]: https://img.shields.io/github/stars/ocean-data-factory-sweden/koster_app.svg?style=for-the-badge
+[stars-shield]: https://img.shields.io/github/stars/ocean-data-factory-sweden/koster_data_management.svg?style=for-the-badge
 [stars-url]: https://github.com/ocean-data-factory-sweden/koster_data_management/stargazers
-[issues-shield]: https://img.shields.io/github/issues/ocean-data-factory-sweden/koster_app.svg?style=for-the-badge
+[issues-shield]: https://img.shields.io/github/issues/ocean-data-factory-sweden/koster_data_management.svg?style=for-the-badge
 [issues-url]: https://github.com/ocean-data-factory-sweden/koster_data_management/issues
-[license-shield]: https://img.shields.io/github/license/ocean-data-factory-sweden/koster_app.svg?style=for-the-badge
+[license-shield]: https://img.shields.io/github/license/ocean-data-factory-sweden/koster_data_management.svg?style=for-the-badge
 [license-url]: https://github.com/ocean-data-factory-sweden/koster_data_management/blob/main/LICENSE.txt
-[high-level-overview]: https://github.com/ocean-data-factory-sweden/koster_data_management/blob/dev/images/high-level-overview.png?raw=true "Overview of the three main modules and the components of the Koster Seafloor Observatory"
+[high-level-overview]: https://github.com/ocean-data-factory-sweden/koster_data_management/blob/main/images/high-level-overview.png?raw=true "Overview of the three main modules and the components of the Koster Seafloor Observatory"
 [objdecmodule]: https://github.com/ocean-data-factory-sweden/koster_yolov4
 [OBIS-site]: https://www.gbif.org/network/2b7c7b4f-4d4f-40d3-94de-c28b6fa054a6
-[Database_diagram]: https://github.com/ocean-data-factory-sweden/koster_data_management/blob/dev/images/Database_diagram.png?raw=true "Entity relationship diagram of the SQLite database of the Koster Seafloor Observatory"
+[Database_diagram]: https://github.com/ocean-data-factory-sweden/koster_data_management/blob/main/images/Database_diagram.png?raw=true "Entity relationship diagram of the SQLite database of the Koster Seafloor Observatory"
 [binderlogo]: https://mybinder.org/badge_logo.svg
 [binderlink]: https://mybinder.org/v2/gh/ocean-data-factory-sweden/koster_data_management/main
-[screenshot_loading]: https://github.com/ocean-data-factory-sweden/koster_data_management/blob/dev/images/screenshot_loading.png?raw=true
-[screenshot_started]: https://github.com/ocean-data-factory-sweden/koster_data_management/blob/dev/images/screenshot_started.png?raw=true
+[screenshot_loading]: https://github.com/ocean-data-factory-sweden/koster_data_management/blob/main/images/screenshot_loading.png?raw=true
+[screenshot_started]: https://github.com/ocean-data-factory-sweden/koster_data_management/blob/main/images/screenshot_started.png?raw=true
