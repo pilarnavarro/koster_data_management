@@ -60,7 +60,7 @@ I you want to fully use our system (Binder has computing limitations) you will n
 For those with a [Github](https://github.com/) account or git installed simply clone this
 repository using
 ```python
-git clone https://github.com/ocean-data-factory-sweden/koster_data_management.git
+git clone --recurse-submodules https://github.com/ocean-data-factory-sweden/koster_data_management.git
 ```
 
 If you don't have a Github account you can manually download the repository. Click on the green "Code" download button visible on the top right of this screen and choose the Download ZIP option from the Code pull-down menu. 
