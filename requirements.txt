@@ -17,3 +17,4 @@ gdown
 itables
 boto3
 scp==0.14.1
+dataclass-csv==1.4.0
