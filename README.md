@@ -54,16 +54,14 @@ I you want to fully use our system (Binder has computing limitations) you will n
 ### Requirements
 * [Python 3.7+](https://www.python.org/)
 * [Anaconda](https://docs.anaconda.com/anaconda/install/index.html)
+* [GIT](https://git-scm.com/downloads)
 
 ### Option 1: Local / Cloud Installation
 #### Download this repository
-For those with a [Github](https://github.com/) account or git installed simply clone this
-repository using
+Clone this repository using
 ```python
 git clone --recurse-submodules https://github.com/ocean-data-factory-sweden/koster_data_management.git
-```
-
-If you don't have a Github account you need to manually download the repository. Click on the green "Code" download button visible on the top right of this screen and choose the Download ZIP option from the Code pull-down menu. 
+``` 
 
 #### Install dependecies
 Navigate to the folder where you have cloned the repository or unzipped the manually downloaded repository. 
