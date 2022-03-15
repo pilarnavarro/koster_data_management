@@ -1,4 +1,4 @@
-# Koster Seafloor Observatory - Data management
+# KSO - Data management
 
 The Koster Seafloor Observatory is an open-source, citizen science and machine learning approach to analyse subsea movies.
 
@@ -29,7 +29,7 @@ This repository contains scripts related to the data management component of the
 | 3. Upload clips to Zooniverse                     | Prepare original footage and upload short clips to Zooniverse                               | Completed          |
 | 4. Upload frames to Zooniverse                    | Extract frames with animals of interest from original footage and upload them to Zooniverse | Completed          |
 | 5. Train ML models                                | Prepare the training and test data, set model parameters and train models                   | Go to [Object Detection module][objdecmodule]|
-| 6. Evalutate ML models                            | Use ecologically-relevant metrics to test the models                                        | Coming soon        |
+| 6. Evaluate ML models                            | Use ecologically-relevant metrics to test the models                                        | Coming soon        |
 | 7. Expose ML models                               | Expose model to the API                                                                     | Coming soon        |
 | 8. Analyse Zooniverse classifications             | pull up-to-date classifications from Zooniverse and report summary stats/graphs             | Completed          |
 | 9. Download and format Zooniverse classifications | pull up-to-date classifications from Zooniverse and format them for further analysis        | Coming soon        |
@@ -49,7 +49,7 @@ Check out our Binder project to try the system in your browser without installin
 
 
 ## Installation
-I you want to fully use our system (Binder has computing limitations) you will need to download this repository in you local computer or server.
+If you want to fully use our system (Binder has computing limitations), you will need to download this repository on your local computer or server.
 
 ### Requirements
 * [Python 3.7+](https://www.python.org/)
@@ -57,6 +57,7 @@ I you want to fully use our system (Binder has computing limitations) you will n
 * [GIT](https://git-scm.com/downloads)
 
 ### Option 1: Local / Cloud Installation
+-----------------
 #### Download this repository
 Clone this repository using
 ```python
@@ -82,8 +83,16 @@ If you will work in a new project you will need to input the information about t
 You will need files of underwater footage to run this system. You can [download some samples](https://drive.google.com/drive/folders/1t2ce8euh3SEU2I8uhiZN1Tu-76ZDqB6w?usp=sharing) and move them to `db_starter`. You can also store your own files and specify their directory in the tutorials.
 
 
-### Option 2: SNIC Users
-To use the Jupyter Notebooks within the Alvis HPC cluster, please visit `<https://portal.c3se.chalmers.se>`_ and login using your SNIC credentials. 
+### Option 2: SNIC Users (VPN required)
+
+-----------------
+
+**Before using Option 2, users should have login credentials and have setup the Chalmers VPN on their local computers**
+
+Information for Windows users: [Click here](https://it.portal.chalmers.se/itportal/NonCDAWindows/VPN)
+Information for MAC users: [Click here](https://it.portal.chalmers.se/itportal/NonCDAMac/VPN)
+
+To use the Jupyter Notebooks within the Alvis HPC cluster, please visit [Alvis Portal](https://portal.c3se.chalmers.se) and login using your SNIC credentials. 
 
 Once you have been authorized, click on "Interactive Apps" and then "Jupyter". This open the server creation options. 
 
