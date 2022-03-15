@@ -63,10 +63,15 @@ repository using
 git clone --recurse-submodules https://github.com/ocean-data-factory-sweden/koster_data_management.git
 ```
 
-If you don't have a Github account you can manually download the repository. Click on the green "Code" download button visible on the top right of this screen and choose the Download ZIP option from the Code pull-down menu. 
+If you don't have a Github account you need to manually download the repository. Click on the green "Code" download button visible on the top right of this screen and choose the Download ZIP option from the Code pull-down menu. 
 
 #### Install dependecies
-Navigate to the folder where you have cloned the repository or unzipped the manually downloaded repository and run
+Navigate to the folder where you have cloned the repository or unzipped the manually downloaded repository. 
+```python
+cd koster_data_management
+```
+
+Then install the requirements by running.
 ```python
 pip install -r requirements.txt
 ```
