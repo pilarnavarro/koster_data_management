@@ -1,5 +1,5 @@
 mydia==2.2.1
-requests==2.26.0
+requests==2.21.0
 numpy==1.21.4
 pandas==1.3.0
 -e git+https://github.com/zooniverse/panoptes-python-client.git#egg=panoptes_client
