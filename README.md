@@ -18,8 +18,12 @@ The Koster Seafloor Observatory is an open-source, citizen science and machine l
 
 ![high-level][high-level-overview]
 
-## Overview
-This repository contains scripts related to the data management component of the Koster Seafloor Observatory. The system is built around a series of easy-to-use Jupyter notebook tutorials. Each tutorial allows users to perform a specific task of the system (e.g. upload footage to the citizen science platform or analyse the classiffied data).
+## Module Overview
+This data management module contains scripts and resources to move and process underwater footage and its associated data (e.g. location, date, sampling device). 
+
+![Data_man_module][Data_management_module]
+
+The system is built around a series of easy-to-use Jupyter notebook tutorials. Each tutorial allows users to perform a specific task of the system (e.g. upload footage to the citizen science platform or analyse the classiffied data). The notebooks rely on the [koster utility functions](https://github.com/ocean-data-factory-sweden/kso_utils).
 
 ### Tutorials
 | Name                                              | Description                                                                                 | Status             |
@@ -141,6 +145,7 @@ pip install python-magic-bin
 [license-shield]: https://img.shields.io/github/license/ocean-data-factory-sweden/koster_data_management.svg?style=for-the-badge
 [license-url]: https://github.com/ocean-data-factory-sweden/koster_data_management/blob/main/LICENSE.txt
 [high-level-overview]: https://github.com/ocean-data-factory-sweden/koster_data_management/blob/main/images/high-level-overview.png?raw=true "Overview of the three main modules and the components of the Koster Seafloor Observatory"
+[Data_management_module]: https://github.com/ocean-data-factory-sweden/koster_data_management/blob/main/images/Koster_data_management_module.png?raw=true
 [objdecmodule]: https://github.com/ocean-data-factory-sweden/koster_yolov4
 [OBIS-site]: https://www.gbif.org/network/2b7c7b4f-4d4f-40d3-94de-c28b6fa054a6
 [Database_diagram]: https://github.com/ocean-data-factory-sweden/koster_data_management/blob/main/images/Database_diagram.png?raw=true "Entity relationship diagram of the SQLite database of the Koster Seafloor Observatory"
