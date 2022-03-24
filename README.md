@@ -45,7 +45,6 @@ The database has seven interconnected tables. The “movies”, “sites” and 
 
 ![Database_diag][Database_diagram]
 
-
 ## Quickstart
 Check out our Binder project to try the system in your browser without installing anything. 
 
