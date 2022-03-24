@@ -47,4 +47,6 @@ USER root
 RUN chown ${NB_USER} -R ${HOME}
 USER ${NB_USER}
 WORKDIR ${HOME}
+# Make sure this is run another time for new user
+RUN jupyter nbextension enable --user --py widgetsnbextension
 
