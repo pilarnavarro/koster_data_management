@@ -28,8 +28,8 @@ The system is built around a series of easy-to-use Jupyter notebook tutorials. E
 ### Tutorials
 | Name                                              | Description                                                                                 | Status             |
 | ------------------------------------------------- | ------------------------------------------------------------------------------------------- | :-----------------:|
-| 1. Upload new footage                             | Upload new underwater media to the cloud/server and update the csv files                    | Coming soon        |
-| 2. Check and update csv files                     | Check and update initial information about sites, media and species of interestest          | In progress        |
+| 1. Check and update csv files                     | Check and update initial information about sites, media and species of interestest          | Coming soon        |
+| 2. Upload new footage                             | Upload new underwater media to the cloud/server and update the csv files                    | In progress        |
 | 3. Upload clips to Zooniverse                     | Prepare original footage and upload short clips to Zooniverse                               | Completed          |
 | 4. Upload frames to Zooniverse                    | Extract frames with animals of interest from original footage and upload them to Zooniverse | Completed          |
 | 5. Train ML models                                | Prepare the training and test data, set model parameters and train models                   | Go to [Object Detection module][objdecmodule]|
