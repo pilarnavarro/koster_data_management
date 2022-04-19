@@ -122,6 +122,16 @@ You can find out more about the project at https://www.zooniverse.org/projects/v
 
 We are always excited to collaborate and help other marine scientists. Please feel free to [contact us](matthias.obst@marine.gu.se) with your questions.
 
+## Dev instructions
+
+- Installing conda 
+- Create new environment (e.g. "new environment")
+- Install git and pip (with conda)
+- Clone kso repo
+- pip install ipykernel
+- python -m ipykernel install --user --name="new_environment"
+- from the jupyter notebook select kernel/change kernel
+
 ## Troubleshooting
 
 If you experience issues to upload movies to zooniverse. It might be related to the libmagic package. In windows the following commands seem to work.
