@@ -23,21 +23,21 @@ This data management module contains scripts and resources to move and process u
 
 ![Data_man_module][Data_management_module]
 
-The system is built around a series of easy-to-use Jupyter notebook tutorials. Each tutorial allows users to perform a specific task of the system (e.g. upload footage to the citizen science platform or analyse the classiffied data). The notebooks rely on the [koster utility functions](https://github.com/ocean-data-factory-sweden/kso_utils).
+The system is built around a series of easy-to-use Jupyter notebook tutorials. Each tutorial allows users to perform a specific task of the system (e.g. upload footage to the citizen science platform or analyse the classiffied data). The notebooks rely on the [koster utility functions][koster_utils_repo].
 
 ### Tutorials
-| Name                                              | Description                                                                                 | Status             |
-| ------------------------------------------------- | ------------------------------------------------------------------------------------------- | :-----------------:|
-| 1. Check and update csv files                     | Check and update initial information about sites, media and species of interestest          | Coming soon        |
-| 2. Upload new footage                             | Upload new underwater media to the cloud/server and update the csv files                    | In progress        |
-| 3. Upload clips to Zooniverse                     | Prepare original footage and upload short clips to Zooniverse                               | Completed          |
-| 4. Upload frames to Zooniverse                    | Extract frames with animals of interest from original footage and upload them to Zooniverse | Completed          |
-| 5. Train ML models                                | Prepare the training and test data, set model parameters and train models                   | Go to [Object Detection module][objdecmodule]|
-| 6. Evaluate ML models                            | Use ecologically-relevant metrics to test the models                                        | Coming soon        |
-| 7. Expose ML models                               | Expose model to the API                                                                     | Coming soon        |
-| 8. Analyse Zooniverse classifications             | pull up-to-date classifications from Zooniverse and report summary stats/graphs             | Completed          |
-| 9. Download and format Zooniverse classifications | pull up-to-date classifications from Zooniverse and format them for further analysis        | Coming soon        |
-| 10. Publish classifications                       | Publish classifications to  [OBIS][OBIS-site]                                               | Coming soon        |
+| Name                                              | Description                                                                                 | Try it!  | 
+| ------------------------------------------------- | ------------------------------------------------------------------------------------------- | --------|
+| 1. Check and update csv files                     | Check and update initial information about sites, media and species of interestest          | Coming soon | 
+| 2. Upload new footage                             | Upload new underwater media to the cloud/server and update the csv files                    | [![Open In Colab][colablogo]][colab_tut_2] [![binder][binderlogo]][binder_tut_2] | 
+| 3. Upload clips to Zooniverse                     | Prepare original footage and upload short clips to Zooniverse                               | [![Open In Colab][colablogo]][colab_tut_3] [![binder][binderlogo]][binder_tut_3] |
+| 4. Upload frames to Zooniverse                    | Extract frames with animals of interest from original footage and upload them to Zooniverse | Coming soon         |
+| 5. Train ML models                                | Prepare the training and test data, set model parameters and train models                   | [![Open In Colab][colablogo]][colab_tut_5] [![binder][binderlogo]][binder_tut_5] | 
+| 6. Evaluate ML models                            | Use ecologically-relevant metrics to test the models                                        | Coming soon  |
+| 7. Expose ML models                               | Expose model to the API                                                                     | Coming soon | 
+| 8. Analyse Zooniverse classifications             | pull up-to-date classifications from Zooniverse and report summary stats/graphs             | [![Open In Colab][colablogo]][colab_tut_8] [![binder][binderlogo]][binder_tut_8] |
+| 9. Download and format Zooniverse classifications | pull up-to-date classifications from Zooniverse and format them for further analysis        | Coming soon  | 
+| 10. Publish classifications                       | Publish classifications to  [OBIS][OBIS-site]                                               | Coming soon  | 
   
 ### Database
 The system uses a series of csv files to create a SQLite database to link all information related to the underwater footage and the classifications. The database follows the [Darwin Core standards (DwC)](https://dwc.tdwg.org/simple/) to maximise the sharing, use and reuse of open-access biodiversity data.
@@ -45,13 +45,8 @@ The database has seven interconnected tables. The “movies”, “sites” and 
 
 ![Database_diag][Database_diagram]
 
-## Quickstart
-Check out our Binder project to try the system in your browser without installing anything. 
 
-[![binder][binderlogo]][binderlink]
-
-
-## Installation
+## Dev Installation
 If you want to fully use our system (Binder has computing limitations), you will need to download this repository on your local computer or server.
 
 ### Requirements
@@ -155,10 +150,19 @@ pip install python-magic-bin
 [license-url]: https://github.com/ocean-data-factory-sweden/koster_data_management/blob/main/LICENSE.txt
 [high-level-overview]: https://github.com/ocean-data-factory-sweden/koster_data_management/blob/main/images/high-level-overview.png?raw=true "Overview of the three main modules and the components of the Koster Seafloor Observatory"
 [Data_management_module]: https://github.com/ocean-data-factory-sweden/koster_data_management/blob/main/images/Koster_data_management_module.png?raw=true
+[koster_utils_repo]: https://github.com/ocean-data-factory-sweden/kso_utils
+[colablogo]: https://colab.research.google.com/assets/colab-badge.svg
+[binderlogo]: https://mybinder.org/badge_logo.svg
+[colab_tut_2]: https://colab.research.google.com/github/ocean-data-factory-sweden/koster_data_management/blob/dev/colab_tutorials/2_Upload_new_footage.ipynb
+[binder_tut_2]: https://mybinder.org/v2/gh/ocean-data-factory-sweden/koster_data_management/dev
+[colab_tut_3]: https://colab.research.google.com/github/ocean-data-factory-sweden/koster_data_management/blob/dev/colab_tutorials/3_Upload_clips_to_Zooniverse.ipynb
+[binder_tut_3]: https://mybinder.org/v2/gh/ocean-data-factory-sweden/koster_data_management/dev
+[colab_tut_5]: https://colab.research.google.com/github/ocean-data-factory-sweden/koster_yolov4/blob/master/Colab/5_Colab_Train_Koster_ML_models.ipynb
+[binder_tut_5]: https://mybinder.org/v2/gh/ocean-data-factory-sweden/koster_data_management/dev
+[colab_tut_8]: https://colab.research.google.com/github/ocean-data-factory-sweden/koster_data_management/blob/dev/colab_tutorials/8_Analyse_Zooniverse_classifications.ipynb
+[binder_tut_8]: https://mybinder.org/v2/gh/ocean-data-factory-sweden/koster_data_management/dev
 [objdecmodule]: https://github.com/ocean-data-factory-sweden/koster_yolov4
 [OBIS-site]: https://www.gbif.org/network/2b7c7b4f-4d4f-40d3-94de-c28b6fa054a6
 [Database_diagram]: https://github.com/ocean-data-factory-sweden/koster_data_management/blob/main/images/Database_diagram.png?raw=true "Entity relationship diagram of the SQLite database of the Koster Seafloor Observatory"
-[binderlogo]: https://mybinder.org/badge_logo.svg
-[binderlink]: https://mybinder.org/v2/gh/ocean-data-factory-sweden/koster_data_management/main
 [screenshot_loading]: https://github.com/ocean-data-factory-sweden/koster_data_management/blob/main/images/screenshot_loading.png?raw=true
 [screenshot_started]: https://github.com/ocean-data-factory-sweden/koster_data_management/blob/main/images/screenshot_started.png?raw=true
