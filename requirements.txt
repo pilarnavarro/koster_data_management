@@ -20,3 +20,4 @@ boto3==1.15.18
 scp==0.14.1
 dataclass-csv==1.4.0
 ipywidgets==8.0.0b0
+ipysheet==0.5.0
