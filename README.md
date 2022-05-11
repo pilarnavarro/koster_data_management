@@ -28,7 +28,7 @@ The system is built around a series of easy-to-use Jupyter notebook tutorials. E
 ### Tutorials
 | Name                                              | Description                                                                                 | Try it!  | 
 | ------------------------------------------------- | ------------------------------------------------------------------------------------------- | --------|
-| 1. Check and update csv files                     | Check and update initial information about sites, media and species of interestest          | Coming soon | 
+| 1. Check and update csv files                     | Check and update initial information about sites, media and species of interestest          | [![Open In Colab][colablogo]][colab_tut_1] [![binder][binderlogo]][binder_tut_1] | 
 | 2. Upload new footage                             | Upload new underwater media to the cloud/server and update the csv files                    | [![Open In Colab][colablogo]][colab_tut_2] [![binder][binderlogo]][binder_tut_2] | 
 | 3. Upload clips to Zooniverse                     | Prepare original footage and upload short clips to Zooniverse                               | [![Open In Colab][colablogo]][colab_tut_3] [![binder][binderlogo]][binder_tut_3] |
 | 4. Upload frames to Zooniverse                    | Extract frames with animals of interest from original footage and upload them to Zooniverse | Coming soon         |
@@ -153,6 +153,8 @@ pip install python-magic-bin
 [koster_utils_repo]: https://github.com/ocean-data-factory-sweden/kso_utils
 [colablogo]: https://colab.research.google.com/assets/colab-badge.svg
 [binderlogo]: https://mybinder.org/badge_logo.svg
+[colab_tut_1]: https://colab.research.google.com/github/ocean-data-factory-sweden/koster_data_management/blob/dev/colab_tutorials/1.%20Check%20and%20update%20csv%20filescolab.ipynb
+[binder_tut_1]: https://mybinder.org/v2/gh/ocean-data-factory-sweden/koster_data_management/dev
 [colab_tut_2]: https://colab.research.google.com/github/ocean-data-factory-sweden/koster_data_management/blob/dev/colab_tutorials/2_Upload_new_footage.ipynb
 [binder_tut_2]: https://mybinder.org/v2/gh/ocean-data-factory-sweden/koster_data_management/dev
 [colab_tut_3]: https://colab.research.google.com/github/ocean-data-factory-sweden/koster_data_management/blob/dev/colab_tutorials/3_Upload_clips_to_Zooniverse.ipynb
