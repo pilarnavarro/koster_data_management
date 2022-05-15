@@ -153,7 +153,7 @@ pip install python-magic-bin
 [koster_utils_repo]: https://github.com/ocean-data-factory-sweden/kso_utils
 [colablogo]: https://colab.research.google.com/assets/colab-badge.svg
 [binderlogo]: https://mybinder.org/badge_logo.svg
-[colab_tut_1]: https://colab.research.google.com/github/ocean-data-factory-sweden/koster_data_management/blob/dev/colab_tutorials/1.%20Check%20and%20update%20csv%20filescolab.ipynb
+[colab_tut_1]: https://colab.research.google.com/github/ocean-data-factory-sweden/koster_data_management/blob/dev/colab_tutorials/1_Check_and_update_csv_files.ipynb
 [binder_tut_1]: https://mybinder.org/v2/gh/ocean-data-factory-sweden/koster_data_management/dev
 [colab_tut_2]: https://colab.research.google.com/github/ocean-data-factory-sweden/koster_data_management/blob/dev/colab_tutorials/2_Upload_new_footage.ipynb
 [binder_tut_2]: https://mybinder.org/v2/gh/ocean-data-factory-sweden/koster_data_management/dev
