@@ -31,13 +31,15 @@ The system is built around a series of easy-to-use Jupyter notebook tutorials. E
 | 1. Check and update csv files                     | Check and update initial information about sites, media and species of interestest          | [![Open In Colab][colablogo]][colab_tut_1] [![binder][binderlogo]][binder_tut_1] | 
 | 2. Upload new footage                             | Upload new underwater media to the cloud/server and update the csv files                    | [![Open In Colab][colablogo]][colab_tut_2] [![binder][binderlogo]][binder_tut_2] | 
 | 3. Upload clips to Zooniverse                     | Prepare original footage and upload short clips to Zooniverse                               | [![Open In Colab][colablogo]][colab_tut_3] [![binder][binderlogo]][binder_tut_3] |
-| 4. Upload frames to Zooniverse                    | Extract frames with animals of interest from original footage and upload them to Zooniverse | Coming soon         |
+| 4. Upload frames to Zooniverse                    | Extract frames with animals of interest from original footage and upload them to Zooniverse | [![Open In Colab][colablogo]][colab_tut_4] [![binder][binderlogo]][binder_tut_4] |
 | 5. Train ML models                                | Prepare the training and test data, set model parameters and train models                   | [![Open In Colab][colablogo]][colab_tut_5] [![binder][binderlogo]][binder_tut_5] | 
 | 6. Evaluate ML models                            | Use ecologically-relevant metrics to test the models                                        | Coming soon  |
 | 7. Expose ML models                               | Expose model to the API                                                                     | Coming soon | 
 | 8. Analyse Zooniverse classifications             | pull up-to-date classifications from Zooniverse and report summary stats/graphs             | [![Open In Colab][colablogo]][colab_tut_8] [![binder][binderlogo]][binder_tut_8] |
 | 9. Download and format Zooniverse classifications | pull up-to-date classifications from Zooniverse and format them for further analysis        | Coming soon  | 
-| 10. Publish classifications                       | Publish classifications to  [OBIS][OBIS-site]                                               | Coming soon  | 
+| 10. Publish classifications                       | Publish classifications to  [OBIS][OBIS-site]                                               | Coming soon  |
+| 11. Concatenate movies                            | Combine multiple short files of the same movie into a single movie file                    | [![Open In Colab][colablogo]][colab_tut_11] [![binder][binderlogo]][binder_tut_11] |
+| 12. Preview underwater movies from the server     | Preview the movies stored in the long term server                                          | [![Open In Colab][colablogo]][colab_tut_12] [![binder][binderlogo]][binder_tut_12] |
   
 ### Database
 The system uses a series of csv files to create a SQLite database to link all information related to the underwater footage and the classifications. The database follows the [Darwin Core standards (DwC)](https://dwc.tdwg.org/simple/) to maximise the sharing, use and reuse of open-access biodiversity data.
@@ -159,10 +161,16 @@ pip install python-magic-bin
 [binder_tut_2]: https://mybinder.org/v2/gh/ocean-data-factory-sweden/koster_data_management/dev
 [colab_tut_3]: https://colab.research.google.com/github/ocean-data-factory-sweden/koster_data_management/blob/dev/colab_tutorials/3_Upload_clips_to_Zooniverse.ipynb
 [binder_tut_3]: https://mybinder.org/v2/gh/ocean-data-factory-sweden/koster_data_management/dev
+[colab_tut_4]: https://colab.research.google.com/github/ocean-data-factory-sweden/koster_data_management/blob/dev/colab_tutorials/4_Upload_frames_to_Zooniverse.ipynb
+[binder_tut_4]: https://mybinder.org/v2/gh/ocean-data-factory-sweden/koster_data_management/dev
 [colab_tut_5]: https://colab.research.google.com/github/ocean-data-factory-sweden/koster_yolov4/blob/master/Colab/5_Colab_Train_Koster_ML_models.ipynb
 [binder_tut_5]: https://mybinder.org/v2/gh/ocean-data-factory-sweden/koster_data_management/dev
 [colab_tut_8]: https://colab.research.google.com/github/ocean-data-factory-sweden/koster_data_management/blob/dev/colab_tutorials/8_Analyse_Zooniverse_classifications.ipynb
 [binder_tut_8]: https://mybinder.org/v2/gh/ocean-data-factory-sweden/koster_data_management/dev
+[colab_tut_11]: https://colab.research.google.com/github/ocean-data-factory-sweden/koster_data_management/blob/dev/colab_tutorials/11_Concatenate_videos_from_AWS.ipynb
+[binder_tut_11]: https://mybinder.org/v2/gh/ocean-data-factory-sweden/koster_data_management/dev
+[colab_tut_12]: https://colab.research.google.com/github/ocean-data-factory-sweden/koster_data_management/blob/dev/colab_tutorials/12_Display_movies_from_server.ipynb
+[binder_tut_12]: https://mybinder.org/v2/gh/ocean-data-factory-sweden/koster_data_management/dev
 [objdecmodule]: https://github.com/ocean-data-factory-sweden/koster_yolov4
 [OBIS-site]: https://www.gbif.org/network/2b7c7b4f-4d4f-40d3-94de-c28b6fa054a6
 [Database_diagram]: https://github.com/ocean-data-factory-sweden/koster_data_management/blob/main/images/Database_diagram.png?raw=true "Entity relationship diagram of the SQLite database of the Koster Seafloor Observatory"
