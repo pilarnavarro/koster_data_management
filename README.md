@@ -33,7 +33,7 @@ The system is built around a series of easy-to-use Jupyter notebook tutorials. E
 | 3. Upload clips to Zooniverse                     | Prepare original footage and upload short clips to Zooniverse                               | [![Open In Colab][colablogo]][colab_tut_3] [![binder][binderlogo]][binder_tut_3] |
 | 4. Upload frames to Zooniverse                    | Extract frames with animals of interest from original footage and upload them to Zooniverse | [![Open In Colab][colablogo]][colab_tut_4] [![binder][binderlogo]][binder_tut_4] |
 | 5. Train ML models                                | Prepare the training and test data, set model parameters and train models                   | [![Open In Colab][colablogo]][colab_tut_5] [![binder][binderlogo]][binder_tut_5] | 
-| 6. Evaluate ML models                            | Use ecologically-relevant metrics to test the models                                        | Coming soon  |
+| 6. Evaluate ML models                            | Use ecologically-relevant metrics to test the models                                        | [![Open In Colab][colablogo]][colab_tut_6] [![binder][binderlogo]][binder_tut_6]   |
 | 7. Expose ML models                               | Expose model to the API                                                                     | Coming soon | 
 | 8. Analyse Zooniverse classifications             | pull up-to-date classifications from Zooniverse and report summary stats/graphs             | [![Open In Colab][colablogo]][colab_tut_8] [![binder][binderlogo]][binder_tut_8] |
 | 9. Download and format Zooniverse classifications | pull up-to-date classifications from Zooniverse and format them for further analysis        | Coming soon  | 
@@ -165,6 +165,8 @@ pip install python-magic-bin
 [binder_tut_4]: https://mybinder.org/v2/gh/ocean-data-factory-sweden/koster_data_management/dev
 [colab_tut_5]: https://colab.research.google.com/github/ocean-data-factory-sweden/koster_yolov4/blob/master/Colab/5_Colab_Train_Koster_ML_models.ipynb
 [binder_tut_5]: https://mybinder.org/v2/gh/ocean-data-factory-sweden/koster_data_management/dev
+[colab_tut_6]: https://colab.research.google.com/github/ocean-data-factory-sweden/koster_yolov4/blob/master/Colab/6_Evaluate_ML_Models.ipynb
+[binder_tut_6]: https://mybinder.org/v2/gh/ocean-data-factory-sweden/koster_data_management/dev
 [colab_tut_8]: https://colab.research.google.com/github/ocean-data-factory-sweden/koster_data_management/blob/dev/colab_tutorials/8_Analyse_Zooniverse_classifications.ipynb
 [binder_tut_8]: https://mybinder.org/v2/gh/ocean-data-factory-sweden/koster_data_management/dev
 [colab_tut_11]: https://colab.research.google.com/github/ocean-data-factory-sweden/koster_data_management/blob/dev/colab_tutorials/11_Concatenate_videos_from_AWS.ipynb
