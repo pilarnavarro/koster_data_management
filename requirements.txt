@@ -25,3 +25,4 @@ ipympl
 ipyvolume
 scipy
 voila
+jupyterlab
