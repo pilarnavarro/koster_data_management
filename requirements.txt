@@ -19,7 +19,7 @@ itables==0.3.0
 boto3==1.15.18
 scp==0.14.1
 dataclass-csv==1.4.0
-ipywidgets==7.7.0
+ipywidgets==7.6.5
 bqplot
 ipympl
 ipyvolume
