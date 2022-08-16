@@ -24,6 +24,8 @@ WORKDIR /usr/src/app/koster_data_management
 RUN pip3 install -r requirements.txt
 RUN jupyter nbextension install --user --py widgetsnbextension
 RUN jupyter nbextension enable --user --py widgetsnbextension
+RUN jupyter serverextension install --user --py voila
+RUN jupyter serverextension enable --user --py voila
 #RUN jupyter nbextension install --user --py qgrid
 #RUN jupyter nbextension enable --user --py qgrid
 ENV PYTHONPATH=$PYTHONPATH:/usr/src/app/koster_data_management
