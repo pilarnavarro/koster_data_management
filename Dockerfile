@@ -23,6 +23,7 @@ RUN git clone --recurse-submodules https://github.com/ocean-data-factory-sweden/
 WORKDIR /usr/src/app/koster_data_management
 RUN pip3 install -r requirements.txt
 RUN pip install voila
+RUN pip install ipywidgets==7.6.5
 RUN jupyter nbextension install --user --py widgetsnbextension
 RUN jupyter nbextension enable --user --py widgetsnbextension
 RUN jupyter nbextension install --user --py voila
