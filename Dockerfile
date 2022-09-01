@@ -26,8 +26,6 @@ RUN pip install voila
 RUN pip install ipywidgets==7.6.5
 RUN jupyter nbextension install --user --py widgetsnbextension
 RUN jupyter nbextension enable --user --py widgetsnbextension
-RUN jupyter nbextension install --user --py voila
-RUN jupyter nbextension enable --user --py voila
 #RUN jupyter nbextension install --user --py qgrid
 #RUN jupyter nbextension enable --user --py qgrid
 ENV PYTHONPATH=$PYTHONPATH:/usr/src/app/koster_data_management
@@ -53,5 +51,4 @@ USER ${NB_USER}
 WORKDIR ${HOME}
 # Make sure this is run another time for new user
 RUN jupyter nbextension enable --user --py widgetsnbextension
-RUN jupyter nbextension enable --user --py voila
 
