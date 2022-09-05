@@ -9,7 +9,8 @@ opencv_python==4.5.4.60
 Pillow==8.3.2
 scikit_learn==1.0.1
 -e git+https://github.com/soft-matter/pims.git#egg=PIMS
-av==8.0.1
+av==8.1.0
+moviepy==1.0.3
 jupyter==1.0.0
 folium==0.12.1
 ipyfilechooser==0.4.4
