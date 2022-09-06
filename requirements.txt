@@ -2,7 +2,6 @@ panoptes-client==1.5.0
 python-magic==0.4.24
 -e git+https://github.com/julian-r/python-magic.git#egg=python-magic-bin
 opencv_python==4.5.4.60
-Pillow==8.3.2
 scikit_learn==1.0.1
 PIMS==0.6.1
 av==8.1.0
