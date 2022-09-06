@@ -23,7 +23,7 @@ This data management module contains scripts and resources to move and process u
 
 ![Data_man_module][Data_management_module]
 
-The system is built around a series of easy-to-use Jupyter notebook tutorials. Each tutorial allows users to perform a specific task of the system (e.g. upload footage to the citizen science platform or analyse the classiffied data). The notebooks rely on the [koster utility functions][koster_utils_repo].
+The system is built around a series of easy-to-use Jupyter notebook tutorials. Each tutorial allows users to perform a specific task of the system (e.g. upload footage to the citizen science platform or analyse the classified data). The notebooks rely on the [koster utility functions][koster_utils_repo].
 
 ### Tutorials
 | Name                                              | Description                                                                                 | Try it!  | 
@@ -131,7 +131,7 @@ We are always excited to collaborate and help other marine scientists. Please fe
 
 ## Troubleshooting
 
-If you experience issues to upload movies to zooniverse. It might be related to the libmagic package. In windows the following commands seem to work.
+If you experience issues uploading movies to Zooniverse, it might be related to the libmagic package. In Windows, the following commands seem to work:
 ```python
 pip install python-libmagic
 pip install python-magic-bin
@@ -167,7 +167,7 @@ pip install python-magic-bin
 [binder_tut_5]: https://mybinder.org/v2/gh/ocean-data-factory-sweden/koster_data_management/main
 [colab_tut_6]: https://colab.research.google.com/github/ocean-data-factory-sweden/koster_yolov4/blob/master/Colab/6_Evaluate_ML_Models.ipynb
 [binder_tut_6]: https://mybinder.org/v2/gh/ocean-data-factory-sweden/koster_data_management/main
-[colab_tut_8]: https://colab.research.google.com/github/ocean-data-factory-sweden/koster_data_management/blob/main/colab_tutorials/COLAB_8_Analyse_Zooniverse_classifications.ipynb
+[colab_tut_8]: https://colab.research.google.com/github/ocean-data-factory-sweden/koster_data_management/blob/main/colab_tutorials/COLAB_8_Analyse_Aggregate_Zooniverse_Annotations.ipynb
 [binder_tut_8]: https://mybinder.org/v2/gh/ocean-data-factory-sweden/koster_data_management/main
 [colab_tut_11]: https://colab.research.google.com/github/ocean-data-factory-sweden/koster_data_management/blob/main/colab_tutorials/COLAB_11_Concatenate_videos_from_AWS.ipynb
 [binder_tut_11]: https://mybinder.org/v2/gh/ocean-data-factory-sweden/koster_data_management/main
