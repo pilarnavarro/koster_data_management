@@ -22,11 +22,11 @@ ADD https://api.github.com/repos/ocean-data-factory-sweden/koster_data_managemen
 RUN git clone --recurse-submodules https://github.com/ocean-data-factory-sweden/koster_data_management.git
 WORKDIR /usr/src/app/koster_data_management
 RUN pip3 install -r requirements.txt
-RUN pip install ipywidgets==8.0.1
+# Install SNIC-specific requirements
+RUN pip3 install ipywidgets==8.0.1
+RUN pip3 install ipysheet==0.4.4 
 RUN jupyter nbextension install --user --py widgetsnbextension
 RUN jupyter nbextension enable --user --py widgetsnbextension
-#RUN jupyter nbextension install --user --py qgrid
-#RUN jupyter nbextension enable --user --py qgrid
 ENV PYTHONPATH=$PYTHONPATH:/usr/src/app/koster_data_management
 
 # Create user
