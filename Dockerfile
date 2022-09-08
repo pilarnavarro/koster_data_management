@@ -50,4 +50,5 @@ USER ${NB_USER}
 WORKDIR ${HOME}
 # Make sure this is run another time for new user
 RUN jupyter nbextension enable --user --py widgetsnbextension
+RUN jupyter nbextension enable --user --py jupyter_bbox_widget
 
