@@ -27,6 +27,7 @@ RUN pip3 install ipywidgets==8.0.1
 RUN pip3 install ipysheet==0.4.4 
 RUN jupyter nbextension install --user --py widgetsnbextension
 RUN jupyter nbextension enable --user --py widgetsnbextension
+RUN jupyter nbextension enable --user --py jupyter_bbox_widget
 ENV PYTHONPATH=$PYTHONPATH:/usr/src/app/koster_data_management
 
 # Create user
