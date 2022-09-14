@@ -162,9 +162,9 @@ pip install python-magic-bin
 [binder_tut_3]: https://mybinder.org/v2/gh/ocean-data-factory-sweden/koster_data_management/main
 [colab_tut_4]: https://colab.research.google.com/github/ocean-data-factory-sweden/koster_data_management/blob/main/tutorials/04_Upload_frames_to_Zooniverse.ipynb
 [binder_tut_4]: https://mybinder.org/v2/gh/ocean-data-factory-sweden/koster_data_management/main
-[colab_tut_5]: https://colab.research.google.com/github/ocean-data-factory-sweden/koster_yolov4/blob/master/Colab/5_Colab_Train_Koster_ML_models.ipynb
+[colab_tut_5]: https://colab.research.google.com/github/ocean-data-factory-sweden/koster_yolov4/blob/master/tutorials/5_Train_YOLO_models.ipynb
 [binder_tut_5]: https://mybinder.org/v2/gh/ocean-data-factory-sweden/koster_data_management/main
-[colab_tut_6]: https://colab.research.google.com/github/ocean-data-factory-sweden/koster_yolov4/blob/master/Colab/6_Evaluate_ML_Models.ipynb
+[colab_tut_6]: https://colab.research.google.com/github/ocean-data-factory-sweden/koster_yolov4/blob/master/tutorials/6_Evaluate_ML_Models.ipynb
 [binder_tut_6]: https://mybinder.org/v2/gh/ocean-data-factory-sweden/koster_data_management/main
 [colab_tut_8]: https://colab.research.google.com/github/ocean-data-factory-sweden/koster_data_management/blob/main/tutorials/08_Analyse_Aggregate_Zooniverse_Annotations.ipynb
 [binder_tut_8]: https://mybinder.org/v2/gh/ocean-data-factory-sweden/koster_data_management/main
