@@ -149,7 +149,7 @@ pip install python-magic-bin
 [issues-url]: https://github.com/ocean-data-factory-sweden/koster_data_management/issues
 [license-shield]: https://img.shields.io/github/license/ocean-data-factory-sweden/koster_data_management.svg?style=for-the-badge
 [license-url]: https://github.com/ocean-data-factory-sweden/koster_data_management/blob/main/LICENSE.txt
-[high-level-overview]: https://github.com/ocean-data-factory-sweden/koster_data_management/blob/main/images/high-level-overview.png?raw=true "Overview of the three main modules and the components of the Koster Seafloor Observatory"
+[high-level-overview]: https://github.com/ocean-data-factory-sweden/koster_data_management/blob/main/images/high-level-overview-2.png?raw=true "Overview of the three main modules and the components of the Koster Seafloor Observatory"
 [Data_management_module]: https://github.com/ocean-data-factory-sweden/koster_data_management/blob/main/images/Koster_data_management_module.png?raw=true
 [koster_utils_repo]: https://github.com/ocean-data-factory-sweden/kso_utils
 [colablogo]: https://colab.research.google.com/assets/colab-badge.svg
