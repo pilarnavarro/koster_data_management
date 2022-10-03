@@ -16,7 +16,9 @@ The Koster Seafloor Observatory is an open-source, citizen science and machine l
 [![Issues][issues-shield]][issues-url]
 [![MIT License][license-shield]][license-url]
 
-![high-level][high-level-overview]
+### KSO Information architecture
+The system processes underwater footage and its associatead metadata into biologically-meaningfull information. The format of the underwater media is standard (.mp4 or .png) and the associated metadata should be captured in three csv files (“movies”, “sites” and “species”) following  the [Darwin Core standards (DwC)](https://dwc.tdwg.org/simple/). 
+![koster_info_diag][high-level-overview]
 
 ## Module Overview
 This data management module contains scripts and resources to move and process underwater footage and its associated data (e.g. location, date, sampling device). 
