@@ -44,11 +44,6 @@ The system is built around a series of easy-to-use Jupyter notebook tutorials. E
   
 \* Project-specific tutorial
 
-### KSO Information architecture
-The system processes underwater footage and its associatead metadata into biologically-meaningfull information. The format of the underwater media is standard (.mp4 or .png) and the associated metadata should be captured in three csv files (“movies”, “sites” and “species”) following  the [Darwin Core standards (DwC)](https://dwc.tdwg.org/simple/). 
-![koster_info_diag][Koster_info_diagram]
-
-
 ## Dev Installation
 If you want to fully use our system (Binder has computing limitations), you will need to download this repository on your local computer or server.
 
