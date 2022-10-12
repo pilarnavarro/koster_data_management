@@ -16,7 +16,9 @@ The Koster Seafloor Observatory is an open-source, citizen science and machine l
 [![Issues][issues-shield]][issues-url]
 [![MIT License][license-shield]][license-url]
 
-![high-level][high-level-overview]
+### KSO Information architecture
+The system processes underwater footage and its associatead metadata into biologically-meaningfull information. The format of the underwater media is standard (.mp4 or .png) and the associated metadata should be captured in three csv files (“movies”, “sites” and “species”) following  the [Darwin Core standards (DwC)](https://dwc.tdwg.org/simple/). 
+![koster_info_diag][high-level-overview]
 
 ## Module Overview
 This data management module contains scripts and resources to move and process underwater footage and its associated data (e.g. location, date, sampling device). 
@@ -41,11 +43,6 @@ The system is built around a series of easy-to-use Jupyter notebook tutorials. E
 
   
 \* Project-specific tutorial
-
-### KSO Information architecture
-The system processes underwater footage and its associatead metadata into biologically-meaningfull information. The format of the underwater media is standard (.mp4 or .png) and the associated metadata should be captured in three csv files (“movies”, “sites” and “species”) following  the [Darwin Core standards (DwC)](https://dwc.tdwg.org/simple/). 
-![koster_info_diag][Koster_info_diagram]
-
 
 ## Dev Installation
 If you want to fully use our system (Binder has computing limitations), you will need to download this repository on your local computer or server.
@@ -149,7 +146,7 @@ pip install python-magic-bin
 [issues-url]: https://github.com/ocean-data-factory-sweden/koster_data_management/issues
 [license-shield]: https://img.shields.io/github/license/ocean-data-factory-sweden/koster_data_management.svg?style=for-the-badge
 [license-url]: https://github.com/ocean-data-factory-sweden/koster_data_management/blob/main/LICENSE.txt
-[high-level-overview]: https://github.com/ocean-data-factory-sweden/koster_data_management/blob/main/images/high-level-overview.png?raw=true "Overview of the three main modules and the components of the Koster Seafloor Observatory"
+[high-level-overview]: https://github.com/ocean-data-factory-sweden/koster_data_management/blob/main/images/high-level-overview-2.png?raw=true "Overview of the three main modules and the components of the Koster Seafloor Observatory"
 [Data_management_module]: https://github.com/ocean-data-factory-sweden/koster_data_management/blob/main/images/Koster_data_management_module.png?raw=true
 [koster_utils_repo]: https://github.com/ocean-data-factory-sweden/kso_utils
 [colablogo]: https://colab.research.google.com/assets/colab-badge.svg
