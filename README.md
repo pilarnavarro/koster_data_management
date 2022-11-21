@@ -125,6 +125,11 @@ We are always excited to collaborate and help other marine scientists. Please fe
 - python -m ipykernel install --user --name="new_environment"
 - from the jupyter notebook select kernel/change kernel
 
+Before pushing your code to the repo, please run black on the code you edited. You can install black package using pip 
+```python
+pip install black
+```
+
 ## Troubleshooting
 
 If you experience issues uploading movies to Zooniverse, it might be related to the libmagic package. In Windows, the following commands seem to work:
