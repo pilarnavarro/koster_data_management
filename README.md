@@ -57,13 +57,13 @@ If you want to fully use our system (Binder has computing limitations), you will
 #### Download this repository
 Clone this repository using
 ```python
-git clone --recurse-submodules https://github.com/ocean-data-factory-sweden/koster_data_management.git
+git clone --recurse-submodules https://github.com/ocean-data-factory-sweden/kso-data-management.git
 ``` 
 
 #### Install dependecies
 Navigate to the folder where you have cloned the repository or unzipped the manually downloaded repository. 
 ```python
-cd koster_data_management
+cd kso-data-management
 ```
 
 Then install the requirements by running.
@@ -125,7 +125,7 @@ We are always excited to collaborate and help other marine scientists. Please fe
 - python -m ipykernel install --user --name="new_environment"
 - from the jupyter notebook select kernel/change kernel
 
-Before pushing your code to the repo, please run black on the code you edited. You can install black package using pip 
+Before pushing your code to the repo, please run black on the code you have edited. You can install black package using pip 
 ```python
 pip install black
 ```
@@ -141,43 +141,43 @@ pip install python-magic-bin
 
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
-[contributors-shield]: https://img.shields.io/github/contributors/ocean-data-factory-sweden/koster_data_management.svg?style=for-the-badge
-[contributors-url]: https://https://github.com/ocean-data-factory-sweden/koster_data_management/graphs/contributors
-[forks-shield]: https://img.shields.io/github/forks/ocean-data-factory-sweden/koster_data_management.svg?style=for-the-badge
-[forks-url]: https://github.com/ocean-data-factory-sweden/koster_data_management/network/members
-[stars-shield]: https://img.shields.io/github/stars/ocean-data-factory-sweden/koster_data_management.svg?style=for-the-badge
-[stars-url]: https://github.com/ocean-data-factory-sweden/koster_data_management/stargazers
-[issues-shield]: https://img.shields.io/github/issues/ocean-data-factory-sweden/koster_data_management.svg?style=for-the-badge
-[issues-url]: https://github.com/ocean-data-factory-sweden/koster_data_management/issues
-[license-shield]: https://img.shields.io/github/license/ocean-data-factory-sweden/koster_data_management.svg?style=for-the-badge
-[license-url]: https://github.com/ocean-data-factory-sweden/koster_data_management/blob/main/LICENSE.txt
-[high-level-overview]: https://github.com/ocean-data-factory-sweden/koster_data_management/blob/main/images/high-level-overview-2.png?raw=true "Overview of the three main modules and the components of the Koster Seafloor Observatory"
-[Data_management_module]: https://github.com/ocean-data-factory-sweden/koster_data_management/blob/main/images/Koster_data_management_module.png?raw=true
+[contributors-shield]: https://img.shields.io/github/contributors/ocean-data-factory-sweden/kso-data-management.svg?style=for-the-badge
+[contributors-url]: https://https://github.com/ocean-data-factory-sweden/kso-data-management/graphs/contributors
+[forks-shield]: https://img.shields.io/github/forks/ocean-data-factory-sweden/kso-data-management.svg?style=for-the-badge
+[forks-url]: https://github.com/ocean-data-factory-sweden/kso-data-management/network/members
+[stars-shield]: https://img.shields.io/github/stars/ocean-data-factory-sweden/kso-data-management.svg?style=for-the-badge
+[stars-url]: https://github.com/ocean-data-factory-sweden/kso-data-management/stargazers
+[issues-shield]: https://img.shields.io/github/issues/ocean-data-factory-sweden/kso-data-management.svg?style=for-the-badge
+[issues-url]: https://github.com/ocean-data-factory-sweden/kso-data-management/issues
+[license-shield]: https://img.shields.io/github/license/ocean-data-factory-sweden/kso-data-management.svg?style=for-the-badge
+[license-url]: https://github.com/ocean-data-factory-sweden/kso-data-management/blob/main/LICENSE.txt
+[high-level-overview]: https://github.com/ocean-data-factory-sweden/kso-data-management/blob/main/images/high-level-overview-2.png?raw=true "Overview of the three main modules and the components of the Koster Seafloor Observatory"
+[Data_management_module]: https://github.com/ocean-data-factory-sweden/kso-data-management/blob/main/images/kso-data-management_module.png?raw=true
 [koster_utils_repo]: https://github.com/ocean-data-factory-sweden/kso_utils
 [colablogo]: https://colab.research.google.com/assets/colab-badge.svg
 [binderlogo]: https://mybinder.org/badge_logo.svg
-[colab_tut_1]: https://colab.research.google.com/github/ocean-data-factory-sweden/koster_data_management/blob/main/tutorials/01_Check_and_update_csv_files.ipynb
-[binder_tut_1]: https://mybinder.org/v2/gh/ocean-data-factory-sweden/koster_data_management/main
-[colab_tut_2]: https://colab.research.google.com/github/ocean-data-factory-sweden/koster_data_management/blob/main/tutorials/02_Upload_new_footage.ipynb
-[binder_tut_2]: https://mybinder.org/v2/gh/ocean-data-factory-sweden/koster_data_management/main
-[colab_tut_3]: https://colab.research.google.com/github/ocean-data-factory-sweden/koster_data_management/blob/main/tutorials/03_Upload_clips_to_Zooniverse.ipynb
-[binder_tut_3]: https://mybinder.org/v2/gh/ocean-data-factory-sweden/koster_data_management/main
-[colab_tut_4]: https://colab.research.google.com/github/ocean-data-factory-sweden/koster_data_management/blob/main/tutorials/04_Upload_frames_to_Zooniverse.ipynb
-[binder_tut_4]: https://mybinder.org/v2/gh/ocean-data-factory-sweden/koster_data_management/main
-[colab_tut_5]: https://colab.research.google.com/github/ocean-data-factory-sweden/koster_yolov4/blob/master/tutorials/5_Train_YOLO_models.ipynb
-[binder_tut_5]: https://mybinder.org/v2/gh/ocean-data-factory-sweden/koster_yolov4/master
-[colab_tut_6]: https://colab.research.google.com/github/ocean-data-factory-sweden/koster_yolov4/blob/master/tutorials/6_Evaluate_ML_Models.ipynb
-[binder_tut_6]: https://mybinder.org/v2/gh/ocean-data-factory-sweden/koster_yolov4/master
-[colab_tut_7]: https://colab.research.google.com/github/ocean-data-factory-sweden/koster_yolov4/blob/master/tutorials/7_Transfer_ML_Models.ipynb
-[binder_tut_7]: https://mybinder.org/v2/gh/ocean-data-factory-sweden/koster_yolov4/master
-[colab_tut_8]: https://colab.research.google.com/github/ocean-data-factory-sweden/koster_data_management/blob/main/tutorials/08_Analyse_Aggregate_Zooniverse_Annotations.ipynb
-[binder_tut_8]: https://mybinder.org/v2/gh/ocean-data-factory-sweden/koster_data_management/main
-[colab_tut_11]: https://colab.research.google.com/github/ocean-data-factory-sweden/koster_data_management/blob/main/tutorials/11_Concatenate_videos_from_AWS.ipynb
-[binder_tut_11]: https://mybinder.org/v2/gh/ocean-data-factory-sweden/koster_data_management/main
-[colab_tut_12]: https://colab.research.google.com/github/ocean-data-factory-sweden/koster_data_management/blob/main/tutorials/12_Display_movies_available_on_the_server.ipynb
-[binder_tut_12]: https://mybinder.org/v2/gh/ocean-data-factory-sweden/koster_data_management/main
-[objdecmodule]: https://github.com/ocean-data-factory-sweden/koster_yolov4
+[colab_tut_1]: https://colab.research.google.com/github/ocean-data-factory-sweden/kso-data-management/blob/main/tutorials/01_Check_and_update_csv_files.ipynb
+[binder_tut_1]: https://mybinder.org/v2/gh/ocean-data-factory-sweden/kso-data-management/main
+[colab_tut_2]: https://colab.research.google.com/github/ocean-data-factory-sweden/kso-data-management/blob/main/tutorials/02_Upload_new_footage.ipynb
+[binder_tut_2]: https://mybinder.org/v2/gh/ocean-data-factory-sweden/kso-data-management/main
+[colab_tut_3]: https://colab.research.google.com/github/ocean-data-factory-sweden/kso-data-management/blob/main/tutorials/03_Upload_clips_to_Zooniverse.ipynb
+[binder_tut_3]: https://mybinder.org/v2/gh/ocean-data-factory-sweden/kso-data-management/main
+[colab_tut_4]: https://colab.research.google.com/github/ocean-data-factory-sweden/kso-data-management/blob/main/tutorials/04_Upload_frames_to_Zooniverse.ipynb
+[binder_tut_4]: https://mybinder.org/v2/gh/ocean-data-factory-sweden/kso-data-management/main
+[colab_tut_5]: https://colab.research.google.com/github/ocean-data-factory-sweden/kso-object-detection/blob/master/tutorials/5_Train_YOLO_models.ipynb
+[binder_tut_5]: https://mybinder.org/v2/gh/ocean-data-factory-sweden/kso-object-detection/master
+[colab_tut_6]: https://colab.research.google.com/github/ocean-data-factory-sweden/kso-object-detection/blob/master/tutorials/6_Evaluate_ML_Models.ipynb
+[binder_tut_6]: https://mybinder.org/v2/gh/ocean-data-factory-sweden/kso-object-detection/master
+[colab_tut_7]: https://colab.research.google.com/github/ocean-data-factory-sweden/kso-object-detection/blob/master/tutorials/7_Transfer_ML_Models.ipynb
+[binder_tut_7]: https://mybinder.org/v2/gh/ocean-data-factory-sweden/kso-object-detection/master
+[colab_tut_8]: https://colab.research.google.com/github/ocean-data-factory-sweden/kso-data-management/blob/main/tutorials/08_Analyse_Aggregate_Zooniverse_Annotations.ipynb
+[binder_tut_8]: https://mybinder.org/v2/gh/ocean-data-factory-sweden/kso-data-management/main
+[colab_tut_11]: https://colab.research.google.com/github/ocean-data-factory-sweden/kso-data-management/blob/main/tutorials/11_Concatenate_videos_from_AWS.ipynb
+[binder_tut_11]: https://mybinder.org/v2/gh/ocean-data-factory-sweden/kso-data-management/main
+[colab_tut_12]: https://colab.research.google.com/github/ocean-data-factory-sweden/kso-data-management/blob/main/tutorials/12_Display_movies_available_on_the_server.ipynb
+[binder_tut_12]: https://mybinder.org/v2/gh/ocean-data-factory-sweden/kso-data-management/main
+[objdecmodule]: https://github.com/ocean-data-factory-sweden/kso-object-detection
 [OBIS-site]: https://www.gbif.org/network/2b7c7b4f-4d4f-40d3-94de-c28b6fa054a6
-[Koster_info_diagram]: https://github.com/ocean-data-factory-sweden/koster_data_management/blob/main/images/Koster_information_flow.png?raw=true "Information architecture of the Koster Seafloor Observatory"
-[screenshot_loading]: https://github.com/ocean-data-factory-sweden/koster_data_management/blob/main/images/screenshot_loading.png?raw=true
-[screenshot_started]: https://github.com/ocean-data-factory-sweden/koster_data_management/blob/main/images/screenshot_started.png?raw=true
+[Koster_info_diagram]: https://github.com/ocean-data-factory-sweden/kso-data-management/blob/main/images/Koster_information_flow.png?raw=true "Information architecture of the Koster Seafloor Observatory"
+[screenshot_loading]: https://github.com/ocean-data-factory-sweden/kso-data-management/blob/main/images/screenshot_loading.png?raw=true
+[screenshot_started]: https://github.com/ocean-data-factory-sweden/kso-data-management/blob/main/images/screenshot_started.png?raw=true
