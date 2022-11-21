@@ -125,7 +125,7 @@ We are always excited to collaborate and help other marine scientists. Please fe
 - python -m ipykernel install --user --name="new_environment"
 - from the jupyter notebook select kernel/change kernel
 
-Before pushing your code to the repo, please run black on the code you have edited. You can install black package using pip 
+Before pushing your code to the repo, please run black on the code you have edited. You can install black package using pip: 
 ```python
 pip install black
 ```
@@ -152,7 +152,7 @@ pip install python-magic-bin
 [license-shield]: https://img.shields.io/github/license/ocean-data-factory-sweden/kso-data-management.svg?style=for-the-badge
 [license-url]: https://github.com/ocean-data-factory-sweden/kso-data-management/blob/main/LICENSE.txt
 [high-level-overview]: https://github.com/ocean-data-factory-sweden/kso-data-management/blob/main/images/high-level-overview-2.png?raw=true "Overview of the three main modules and the components of the Koster Seafloor Observatory"
-[Data_management_module]: https://github.com/ocean-data-factory-sweden/kso-data-management/blob/main/images/kso-data-management_module.png?raw=true
+[Data_management_module]: https://github.com/ocean-data-factory-sweden/kso-data-management/blob/main/images/Koster_data_management_module.png?raw=true
 [koster_utils_repo]: https://github.com/ocean-data-factory-sweden/kso_utils
 [colablogo]: https://colab.research.google.com/assets/colab-badge.svg
 [binderlogo]: https://mybinder.org/badge_logo.svg
