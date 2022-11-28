@@ -16,7 +16,7 @@ The Koster Seafloor Observatory is an open-source, citizen science and machine l
 [![Issues][issues-shield]][issues-url]
 [![MIT License][license-shield]][license-url]
 
-### KSO Information architecture
+## KSO Information architecture
 The system processes underwater footage and its associatead metadata into biologically-meaningfull information. The format of the underwater media is standard (.mp4 or .png) and the associated metadata should be captured in three csv files (“movies”, “sites” and “species”) following  the [Darwin Core standards (DwC)](https://dwc.tdwg.org/simple/). 
 ![koster_info_diag][high-level-overview]
 
@@ -27,7 +27,7 @@ This data management module contains scripts and resources to move and process u
 
 The system is built around a series of easy-to-use Jupyter notebook tutorials. Each tutorial allows users to perform a specific task of the system (e.g. upload footage to the citizen science platform or analyse the classified data). The notebooks rely on the [koster utility functions][koster_utils_repo].
 
-### Tutorials
+## Tutorials
 | Name                                              | Description                                                                                 | Try it!  | 
 | ------------------------------------------------- | ------------------------------------------------------------------------------------------- | --------|
 | 1. Check footage and metadata                     | Check format and contents of footage and sites, media and species csv files                 | [![Open In Colab][colablogo]][colab_tut_1] [![binder][binderlogo]][binder_tut_1] | 
@@ -44,16 +44,18 @@ The system is built around a series of easy-to-use Jupyter notebook tutorials. E
   
 \* Project-specific tutorial
 
-## Dev Installation
-If you want to fully use our system (Binder has computing limitations), you will need to download this repository on your local computer or server.
+## Local Installation
+If you want to fully use our system (Binder and Colab has computing limitations), you will need to download this repository on your local computer or server.
 
 ### Requirements
 * [Python 3.7+](https://www.python.org/)
 * [Anaconda](https://docs.anaconda.com/anaconda/install/index.html)
 * [GIT](https://git-scm.com/downloads)
 
-### Option 1: Local / Cloud Installation
------------------
+### Installation
+#### Create a new conda environment
+Follow the [documentation to create a new environment in conda](https://conda.io/projects/conda/en/latest/user-guide/tasks/manage-environments.html#creating-an-environment-with-commands)
+
 #### Download this repository
 Clone this repository using
 ```python
@@ -79,18 +81,44 @@ If you will work in a new project you will need to input the information about t
 You will need files of underwater footage to run this system. You can [download some samples](https://drive.google.com/drive/folders/1t2ce8euh3SEU2I8uhiZN1Tu-76ZDqB6w?usp=sharing) and move them to `db_starter`. You can also store your own files and specify their directory in the tutorials.
 
 
-### Option 2: SNIC Users (VPN required)
+## Dev instructions
 
------------------
+If you would like to expand and improve the KSO capabilities, please follow the instructions below and reach out if there are any issues. 
 
-**Before using Option 2, users should have login credentials and have setup the Chalmers VPN on their local computers**
+### Dev requirements
+* [Python 3.7+](https://www.python.org/)
+* [Anaconda](https://docs.anaconda.com/anaconda/install/index.html)
+* [GIT](https://git-scm.com/downloads)
+* [Black](https://pypi.org/project/black/)
 
-Information for Windows users: [Click here](https://it.portal.chalmers.se/itportal/NonCDAWindows/VPN)
-Information for MAC users: [Click here](https://it.portal.chalmers.se/itportal/NonCDAMac/VPN)
+### Dev set up
+- Install conda 
+- Create new environment
+- Install git and pip (with conda)
+- Clone kso repo and its submodules (ideally your fork)
+- To avoid issues with different notebook kernels we recommend creating a new one: 
+```python
+pip install ipykernel
+python -m ipykernel install --user --name="new_environment"
+```
 
-To use the Jupyter Notebooks within the Alvis HPC cluster, please visit [Alvis Portal](https://portal.c3se.chalmers.se) and login using your SNIC credentials. 
+### Merging your changes
+Before pushing your code to the main branch of KSO, please: 
+* run Black on the code you have edited 
+```shell
+black filename 
+```
+* update the timestamp on the notebook
+```shell
+python update_ts.py filename 
+```
 
-Once you have been authorized, click on "Interactive Apps" and then "Jupyter". This open the server creation options. 
+
+## Installation in High Performance Computers
+### Installation for SNIC Users*
+\* SNIC login credentials and access to Chalmers VPN using [Windows](https://it.portal.chalmers.se/itportal/NonCDAWindows/VPN) or [MAC](https://it.portal.chalmers.se/itportal/NonCDAMac/VPN) required.
+
+Log in the [Alvis Portal](https://portal.c3se.chalmers.se) and click on "Interactive Apps" and then "Jupyter". This open the server creation options. 
 
 Here you can keep the settings as default, apart from the "Number of hours" which you can set to the desired limit. Then choose either **Data Management (Runtime (User specified jupyter1.sh))** or **Machine Learning (Runtime (User specified jupyter2.sh))** from the Runtime dropdown options.
 
@@ -102,6 +130,14 @@ This will directly queue a server session using the correct container image, fir
 ![screenshot_start][screenshot_started]
 
 Important note: The remaining time for the server is shown in green window as well. If you have finished using the notebook server before the alloted time runs out, please select **"Delete"** so that the resources can be released for use by others within the project. 
+
+## Troubleshooting
+
+If you experience issues uploading movies to Zooniverse, it might be related to the libmagic package. In Windows, the following commands seem to work:
+```python
+pip install python-libmagic
+pip install python-magic-bin
+```
 
 
 ## Citation
@@ -115,28 +151,7 @@ You can find out more about the project at https://www.zooniverse.org/projects/v
 
 We are always excited to collaborate and help other marine scientists. Please feel free to [contact us](matthias.obst@marine.gu.se) with your questions.
 
-## Dev instructions
 
-- Installing conda 
-- Create new environment (e.g. "new environment")
-- Install git and pip (with conda)
-- Clone kso repo
-- pip install ipykernel
-- python -m ipykernel install --user --name="new_environment"
-- from the jupyter notebook select kernel/change kernel
-
-Before pushing your code to the repo, please run black on the code you have edited. You can install black package using pip: 
-```python
-pip install black
-```
-
-## Troubleshooting
-
-If you experience issues uploading movies to Zooniverse, it might be related to the libmagic package. In Windows, the following commands seem to work:
-```python
-pip install python-libmagic
-pip install python-magic-bin
-```
 
 
 <!-- MARKDOWN LINKS & IMAGES -->
@@ -179,5 +194,5 @@ pip install python-magic-bin
 [objdecmodule]: https://github.com/ocean-data-factory-sweden/kso-object-detection
 [OBIS-site]: https://www.gbif.org/network/2b7c7b4f-4d4f-40d3-94de-c28b6fa054a6
 [Koster_info_diagram]: https://github.com/ocean-data-factory-sweden/kso-data-management/blob/main/images/Koster_information_flow.png?raw=true "Information architecture of the Koster Seafloor Observatory"
-[screenshot_loading]: https://github.com/ocean-data-factory-sweden/kso-data-management/blob/main/images/screenshot_loading.png?raw=true
-[screenshot_started]: https://github.com/ocean-data-factory-sweden/kso-data-management/blob/main/images/screenshot_started.png?raw=true
+[screenshot_loading]: https://github.com/ocean-data-factory-sweden/kso-data-management/blob/main/images/screenshot_loading.png?raw
+[screenshot_started]: https://github.com/ocean-data-factory-sweden/kso-data-management/blob/main/images/screenshot_started.png?raw
