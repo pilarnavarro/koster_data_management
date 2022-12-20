@@ -1,0 +1,30 @@
+name: kso-dm-conda
+dependencies:
+  - python=3.8
+  - pip
+  - pip:
+    - panoptes-client==1.5.0
+    - python-magic==0.4.24
+    - -e git+https://github.com/julian-r/python-magic.git#egg=python-magic-bin
+    - opencv_python==4.5.4.60
+    - scikit_learn==1.0.1
+    - PIMS==0.6.1
+    - av==8.1.0
+    - moviepy==1.0.3
+    - ffmpeg-python==0.2.0
+    - jupyter==1.0.0
+    - folium==0.12.1
+    - ipyfilechooser==0.4.4
+    - ipysheet==0.4.4
+    - ipywidgets>=7.7.2
+    - qgrid==1.3.1
+    - gdown==3.13.0
+    - itables==0.3.0
+    - boto3==1.15.18
+    - scp==0.14.1
+    - dataclass-csv==1.4.0
+    - jupyter-bbox-widget==0.5.0
+    - wandb==0.13.2
+    - natsort==8.1.0
+    - easydict==1.9.0
+    - imagesize==1.4.1
