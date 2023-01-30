@@ -118,7 +118,9 @@ python update_ts.py filename
 ### Installation for SNIC Users*
 \* SNIC login credentials and access to Chalmers VPN using [Windows](https://it.portal.chalmers.se/itportal/NonCDAWindows/VPN) or [MAC](https://it.portal.chalmers.se/itportal/NonCDAMac/VPN) required.
 
-Log in the [Alvis Portal](https://portal.c3se.chalmers.se) and click on "Interactive Apps" and then "Jupyter". This open the server creation options. 
+Log in the [Alvis Portal](https://portal.c3se.chalmers.se) and click on "Interactive Apps" and then "Jupyter". This open the server creation options.
+
+Creating a Jupyter session requires a custom environment file, which is available on our shared drive */mimer/NOBACKUP/groups/snic2022-22-1210/jupter_envs*. Please copy these files to your **Home Directory** in order to use the custom environments we have created.
 
 Here you can keep the settings as default, apart from the "Number of hours" which you can set to the desired limit. Then choose either **Data Management (Runtime (User specified jupyter1.sh))** or **Machine Learning (Runtime (User specified jupyter2.sh))** from the Runtime dropdown options.
 
