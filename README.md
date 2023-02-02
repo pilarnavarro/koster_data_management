@@ -112,7 +112,7 @@ black filename
 ```shell
 python update_ts.py filename 
 ```
-
+Remember to follow the [conventional commits guidelines](https://www.conventionalcommits.org/en/v1.0.0/) to facilitate code sharing. 
 
 ## Installation in High Performance Computers
 ### Installation for SNIC Users*
