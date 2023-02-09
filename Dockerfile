@@ -1,30 +1,47 @@
 # Koster Object Detection - Koster Lab Database
 # author: Jannes Germishuys
 
-FROM python:3.8-slim
-
-RUN pip install --upgrade pip --user
+FROM nvidia/cuda:10.0-devel-ubuntu18.04 as builder
 
 RUN apt-get update && \
     apt-get upgrade -y && \
-    apt-get install -y make automake gcc g++ subversion && \
-    apt-get install -y git && \
-    apt-get install -y vim && \
-    apt-get install -y libglib2.0-0 && \
-    apt-get install -y libsm6 libxext6 libxrender-dev && \
-    apt-get install -y ffmpeg && \
+    apt-get install -y make automake gcc g++ subversion git && \
+    apt-get install -y libglib2.0-0 libsm6 libxext6 libxrender-dev build-essential yasm cmake libtool libc6 libc6-dev unzip wget libnuma1 libnuma-dev pkg-config && \
     apt-get install -y libmagic-dev
 
+# Build ffmpeg with CUDA support from source
+RUN git clone https://git.videolan.org/git/ffmpeg/nv-codec-headers.git && \
+    cd nv-codec-headers && \
+    make install && \
+    cd ..
+
+RUN git clone https://git.ffmpeg.org/ffmpeg.git ffmpeg/ && cd ffmpeg && \
+    ./configure --enable-nonfree --enable-cuda-nvcc --enable-libnpp --extra-cflags=-I/usr/local/cuda/include --extra-ldflags=-L/usr/local/cuda/lib64 && \
+    make -j 8 && \
+    make install
+
+FROM nvidia/cuda:10.0-devel-ubuntu18.04
+
+RUN apt-get update && \
+    apt-get install -y python3.8 python3-pip git vim && \
+    apt-get clean
+
+COPY --from=builder /usr/local/bin/ffmpeg /usr/local/bin/ffmpeg
+
+RUN python3.8 -m pip install --upgrade pip --user
+    
+# Create app directory
 RUN mkdir -p /usr/src/app
 WORKDIR /usr/src/app
 
 ADD https://api.github.com/repos/ocean-data-factory-sweden/koster_data_management/git/refs/heads/main version.json
 RUN git clone --recurse-submodules https://github.com/ocean-data-factory-sweden/koster_data_management.git
 WORKDIR /usr/src/app/koster_data_management
-RUN pip3 install -r requirements.txt
+RUN python3.8 -m pip install -r requirements.txt
+
 # Install SNIC-specific requirements
-RUN pip3 install ipywidgets==8.0.1
-RUN pip3 install ipysheet==0.4.4 
+RUN python3.8 -m pip install ipywidgets==8.0.1
+RUN python3.8 -m pip install ipysheet==0.4.4 
 RUN jupyter nbextension install --user --py widgetsnbextension
 RUN jupyter nbextension enable --user --py widgetsnbextension
 RUN jupyter nbextension enable --user --py jupyter_bbox_widget
