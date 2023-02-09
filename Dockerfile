@@ -7,6 +7,8 @@ RUN apt-get update && \
     apt-get install -y python3.8 python3-pip git vim && \
     apt-get clean
 
-RUN update-alternatives --install /usr/bin/pip pip /usr/local/bin/python3 -m pip 1
+RUN export PATH="$HOME/.local/bin:$PATH"
+
+#RUN update-alternatives --install /usr/bin/pip pip /usr/local/bin/python3 -m pip 1
 
 RUN pip --version
