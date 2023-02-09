@@ -23,7 +23,7 @@ RUN git clone https://git.ffmpeg.org/ffmpeg.git ffmpeg/ && cd ffmpeg && \
 FROM nvidia/cuda:10.0-devel-ubuntu18.04
 
 RUN apt-get update && \
-    apt-get install -y python3.8 python3-pip git vim && \
+    apt-get install -y python3.8 python3-pip git vim wget && \
     apt-get clean
 
 COPY --from=builder /usr/local/bin/ffmpeg /usr/local/bin/ffmpeg
