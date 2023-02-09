@@ -7,6 +7,6 @@ RUN apt-get update && \
     apt-get install -y python3.8 python3-pip git vim && \
     apt-get clean
 
-RUN update-alternatives --install /usr/bin/pip pip /usr/bin/pip3 1
+RUN update-alternatives --install /usr/bin/pip pip /usr/local/lib/python3.8/site-packages/pip 1
 
 RUN pip --version
