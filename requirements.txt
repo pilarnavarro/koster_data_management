@@ -25,3 +25,4 @@ easydict==1.9.0
 imagesize==1.4.1
 split-folders==0.5.1
 ftfy==6.1.1
+requests<2.27,>=2.4.2
