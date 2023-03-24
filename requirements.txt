@@ -1,4 +1,4 @@
-panoptes-client==1.5.0
+panoptes-client==1.6.0
 python-magic==0.4.24
 -e git+https://github.com/julian-r/python-magic.git#egg=python-magic-bin
 opencv_python==4.5.4.60
@@ -25,4 +25,3 @@ easydict==1.9.0
 imagesize==1.4.1
 split-folders==0.5.1
 ftfy==6.1.1
-requests<2.27,>=2.4.2
