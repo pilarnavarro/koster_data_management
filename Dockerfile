@@ -40,6 +40,7 @@ ADD https://api.github.com/repos/ocean-data-factory-sweden/koster_data_managemen
 RUN git clone --recurse-submodules https://github.com/ocean-data-factory-sweden/koster_data_management.git
 WORKDIR /usr/src/app/koster_data_management
 RUN pip install -r requirements.txt
+RUN pip install -r kso_utils/requirements.txt
 
 # Install SNIC-specific requirements
 RUN pip install ipywidgets==8.0.1
