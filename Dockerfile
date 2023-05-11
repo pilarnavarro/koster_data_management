@@ -40,7 +40,10 @@ ADD https://api.github.com/repos/ocean-data-factory-sweden/koster_data_managemen
 RUN git clone --recurse-submodules https://github.com/ocean-data-factory-sweden/koster_data_management.git
 WORKDIR /usr/src/app/koster_data_management
 RUN pip install -r requirements.txt
-RUN pip install -r <(grep -v "ffmpeg==" kso_utils/requirements.txt)
+# Install all packages except ffmpeg
+RUN grep -v "ffmpeg==" kso_utils/requirements.txt > filtered_requirements.txt && \
+    pip install -r filtered_requirements.txt && \
+    rm filtered_requirements.txt
 # Install SNIC-specific requirements
 RUN pip install ipywidgets==8.0.1
 RUN pip install ipysheet==0.4.4 
